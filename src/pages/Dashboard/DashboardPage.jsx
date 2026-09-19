@@ -69,7 +69,7 @@ export function DashboardPage() {
         </div>
         <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
           <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Database Lokal Tersinkron</span>
+          <span>Cloud Sync Aktif</span>
         </div>
       </div>
 

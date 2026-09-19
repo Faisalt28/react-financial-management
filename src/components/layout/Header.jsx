@@ -104,8 +104,12 @@ export function Header() {
                 title="Pengaturan Akun"
                 className="flex items-center gap-2 p-1 pl-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
               >
-                <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 shadow-2xs">
-                  {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 shadow-2xs border border-zinc-200 dark:border-zinc-800">
+                  {user?.avatar ? (
+                    <img src={user.avatar} alt={user.name || 'User'} className="w-full h-full object-cover" />
+                  ) : (
+                    user?.name?.charAt(0)?.toUpperCase() || 'U'
+                  )}
                 </div>
                 <span className="hidden lg:inline text-xs font-medium text-zinc-700 dark:text-zinc-300 max-w-[100px] truncate">
                   {user?.name || 'User'}

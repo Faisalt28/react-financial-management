@@ -16,7 +16,7 @@ export function AppLayout() {
       <footer className="border-t border-zinc-200/60 dark:border-zinc-800/60 py-4 text-center text-xs text-zinc-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>AcheeZ &copy; {new Date().getFullYear()} — Manajemen Keuangan Pribadi</span>
-          <span className="text-zinc-500">Penyimpanan lokal aman di browser Anda</span>
+          <span className="text-zinc-500">Semua data terenkripsi dan tersimpan aman</span>
         </div>
       </footer>
     </div>

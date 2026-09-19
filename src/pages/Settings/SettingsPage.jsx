@@ -1,28 +1,90 @@
-import { useState } from 'react'
-import { User, Mail, Lock, Trash2, Save, Eye, EyeOff, Plus, Edit2 } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { User, Mail, Lock, Trash2, Save, Eye, EyeOff, Camera, Upload, X, Check } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore.js'
 import { Card, CardHeader, CardTitle, Button, Input, Modal, ConfirmModal, Badge } from '@/components/ui'
-import { CATEGORIES, ACCOUNT_COLORS } from '../../lib/constants.js'
 import { api } from '@/lib/api'
 import { useNavigate } from 'react-router-dom'
 
 export function SettingsPage() {
   const { user, updateProfile, logout } = useAuthStore()
   const navigate = useNavigate()
+  const fileInputRef = useRef(null)
+
   const [profileForm, setProfileForm] = useState({ name: user?.name || '', email: user?.email || '' })
   const [passForm, setPassForm] = useState({ current: '', newPass: '', confirm: '' })
   const [showPass, setShowPass] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [profileSaved, setProfileSaved] = useState(false)
+  const [photoSaved, setPhotoSaved] = useState(false)
+  const [photoLoading, setPhotoLoading] = useState(false)
   const [passSaved, setPassSaved] = useState(false)
   const [passError, setPassError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const saveProfile = async (e) => {
     e.preventDefault()
-    await updateProfile({ name: profileForm.name })
+    await updateProfile({ name: profileForm.name, avatar: user?.avatar })
     setProfileSaved(true)
     setTimeout(() => setProfileSaved(false), 2000)
+  }
+
+  // Handle Photo File Upload with client-side canvas compression
+  const handlePhotoSelect = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      alert('Pilih file gambar (JPG, PNG, atau WebP)')
+      return
+    }
+
+    setPhotoLoading(true)
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const img = new Image()
+      img.onload = async () => {
+        // Create canvas to crop & resize to max 256x256 square
+        const canvas = document.createElement('canvas')
+        const size = 256
+        canvas.width = size
+        canvas.height = size
+        const ctx = canvas.getContext('2d')
+
+        // Center crop math
+        const minDim = Math.min(img.width, img.height)
+        const sx = (img.width - minDim) / 2
+        const sy = (img.height - minDim) / 2
+
+        ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size)
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+
+        try {
+          await updateProfile({ name: profileForm.name || user?.name, avatar: dataUrl })
+          setPhotoSaved(true)
+          setTimeout(() => setPhotoSaved(false), 2500)
+        } catch (err) {
+          alert(err.message || 'Gagal menyimpan foto profil')
+        } finally {
+          setPhotoLoading(false)
+          if (fileInputRef.current) fileInputRef.current.value = ''
+        }
+      }
+      img.src = event.target?.result
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleRemovePhoto = async () => {
+    setPhotoLoading(true)
+    try {
+      await updateProfile({ name: profileForm.name || user?.name, avatar: null })
+      setPhotoSaved(true)
+      setTimeout(() => setPhotoSaved(false), 2000)
+    } catch (err) {
+      alert(err.message || 'Gagal menghapus foto profil')
+    } finally {
+      setPhotoLoading(false)
+    }
   }
 
   const savePassword = async (e) => {
@@ -53,24 +115,82 @@ export function SettingsPage() {
     navigate('/login')
   }
 
-  const avatarColors = ['#4f46e5', '#7c3aed', '#0891b2', '#059669', '#d97706', '#dc2626']
-
   return (
-    <div className="max-w-2xl mx-auto space-y-5 animate-fade-in">
+    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
       {/* Profile */}
       <Card>
         <CardHeader><CardTitle>Profil Pengguna</CardTitle></CardHeader>
 
-        {/* Avatar */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}>
-            {user?.name?.charAt(0)?.toUpperCase()}
+        {/* Avatar Section */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6 p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
+          <div className="relative group self-start sm:self-center">
+            <div className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center text-3xl font-bold flex-shrink-0 bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100 shadow-sm border border-zinc-200 dark:border-zinc-700">
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                user?.name?.charAt(0)?.toUpperCase() || 'U'
+              )}
+            </div>
+
+            {/* Quick camera badge button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              title="Ganti Foto Profil"
+              className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-black text-white dark:bg-white dark:text-black shadow-md hover:scale-105 transition-all border-2 border-white dark:border-zinc-950"
+            >
+              <Camera size={14} />
+            </button>
           </div>
-          <div>
-            <p className="font-semibold text-white">{user?.name}</p>
-            <p className="text-sm text-slate-500">{user?.email}</p>
-            <Badge variant="default" className="mt-1">Pengguna Lokal</Badge>
+
+          <div className="flex-1 min-w-0 space-y-1">
+            <div className="flex items-center gap-2">
+              <p className="font-bold text-base text-zinc-900 dark:text-white truncate">{user?.name}</p>
+              <Badge variant="outline" className="border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30 text-[10px]">
+                Akun Aktif
+              </Badge>
+            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user?.email}</p>
+
+            {/* Photo Action Buttons */}
+            <div className="pt-2 flex flex-wrap items-center gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handlePhotoSelect}
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={photoLoading}
+                className="h-8 text-xs gap-1.5"
+              >
+                <Upload size={13} />
+                <span>{photoLoading ? 'Memproses...' : 'Upload Foto'}</span>
+              </Button>
+
+              {user?.avatar && (
+                <button
+                  type="button"
+                  onClick={handleRemovePhoto}
+                  disabled={photoLoading}
+                  className="h-8 px-2.5 rounded-md text-xs text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors flex items-center gap-1"
+                >
+                  <Trash2 size={13} />
+                  <span>Hapus Foto</span>
+                </button>
+              )}
+
+              {photoSaved && (
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                  <Check size={14} /> Foto disimpan!
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -83,7 +203,7 @@ export function SettingsPage() {
             id="settings-name"
           />
           <Input
-            label="Email"
+            label="Email Akun"
             value={profileForm.email}
             icon={<Mail size={15} />}
             id="settings-email"
@@ -139,14 +259,15 @@ export function SettingsPage() {
         <CardHeader><CardTitle>Informasi Aplikasi</CardTitle></CardHeader>
         <div className="space-y-3 text-sm">
           {[
+            { label: 'Aplikasi', value: 'AcheeZ Financial Management' },
             { label: 'Versi', value: '1.0.0' },
-            { label: 'Penyimpanan', value: 'IndexedDB (Lokal)' },
-            { label: 'Framework', value: 'React 19 + Vite' },
-            { label: 'Styling', value: 'Tailwind CSS v4' },
+            { label: 'Penyimpanan Database', value: 'Cloudflare D1 (Global Edge DB)' },
+            { label: 'Backend Worker', value: 'Cloudflare Workers (Hono)' },
+            { label: 'Hosting Web', value: 'Cloudflare Pages' },
           ].map(i => (
-            <div key={i.label} className="flex justify-between py-2 border-b border-white/5">
-              <span className="text-slate-500">{i.label}</span>
-              <span className="text-slate-300 font-medium">{i.value}</span>
+            <div key={i.label} className="flex justify-between py-2 border-b border-zinc-100 dark:border-zinc-800/60 last:border-0">
+              <span className="text-zinc-500 dark:text-zinc-400">{i.label}</span>
+              <span className="text-zinc-900 dark:text-zinc-200 font-medium">{i.value}</span>
             </div>
           ))}
         </div>
@@ -154,11 +275,13 @@ export function SettingsPage() {
 
       {/* Danger zone */}
       <Card>
-        <CardHeader><CardTitle className="text-rose-400/70">Zona Bahaya</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-rose-600 dark:text-rose-400">Zona Bahaya</CardTitle></CardHeader>
         <div className="space-y-3">
-          <p className="text-sm text-slate-500">Menghapus semua data akan menghapus seluruh transaksi, akun, anggaran, dan tujuan keuangan Anda. Tindakan ini tidak dapat dibatalkan.</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Menghapus semua data akan mengosongkan seluruh riwayat transaksi, rekening akun, batas anggaran, dan target tabungan Anda. Tindakan ini tidak dapat dibatalkan.
+          </p>
           <Button variant="danger" onClick={() => setShowResetConfirm(true)} id="reset-data-btn">
-            <Trash2 size={15} /> Hapus Semua Data
+            <Trash2 size={15} /> Reset Semua Data Saya
           </Button>
         </div>
       </Card>
@@ -167,11 +290,12 @@ export function SettingsPage() {
         isOpen={showResetConfirm}
         onClose={() => setShowResetConfirm(false)}
         onConfirm={handleReset}
-        title="Hapus Semua Data"
-        message="⚠️ Semua data keuangan Anda akan dihapus permanen. Anda akan keluar dan perlu daftar ulang. Yakin?"
-        confirmText="Ya, Hapus Semua"
+        title="Reset Semua Data"
+        message="⚠️ Semua data keuangan Anda akan dihapus permanen dari cloud database. Anda akan logout secara otomatis. Yakin?"
+        confirmText="Ya, Reset Semua"
         loading={loading}
       />
     </div>
   )
 }
+
