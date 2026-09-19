@@ -5,6 +5,7 @@ import { useThemeStore } from './store/themeStore.js'
 import { AppLayout } from './components/layout/AppLayout.jsx'
 import { LoginPage } from './pages/Auth/LoginPage.jsx'
 import { RegisterPage } from './pages/Auth/RegisterPage.jsx'
+import { ForgotPasswordPage } from './pages/Auth/ForgotPasswordPage.jsx'
 import { DashboardPage } from './pages/Dashboard/DashboardPage.jsx'
 import { TransactionsPage } from './pages/Transactions/TransactionsPage.jsx'
 import { AccountsPage } from './pages/Accounts/AccountsPage.jsx'
@@ -37,6 +38,7 @@ export default function App() {
       {/* Public routes */}
       <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+      <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>

@@ -67,3 +67,13 @@ CREATE INDEX IF NOT EXISTS idx_transactions_user ON transactions(user_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_date ON transactions(date);
 CREATE INDEX IF NOT EXISTS idx_budgets_user ON budgets(user_id);
 CREATE INDEX IF NOT EXISTS idx_goals_user ON goals(user_id);
+
+CREATE TABLE IF NOT EXISTS password_resets (
+  id TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  otp TEXT NOT NULL,
+  expires_at INTEGER NOT NULL,
+  created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_password_resets_email ON password_resets(email);

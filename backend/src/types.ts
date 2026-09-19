@@ -1,6 +1,8 @@
 export type Bindings = {
   DB: D1Database
   JWT_SECRET: string
+  RESEND_API_KEY?: string
+  EMAIL_FROM?: string
 }
 
 export type Variables = {

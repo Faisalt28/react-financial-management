@@ -62,6 +62,16 @@ export const api = {
         method: 'PUT',
         body: JSON.stringify({ currentPassword, newPassword }),
       }),
+    forgotPassword: (email: string) =>
+      request<{ success: boolean; message: string; devOtp?: string }>('/api/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      }),
+    resetPassword: (email: string, otp: string, newPassword: string) =>
+      request<{ success: boolean; message: string }>('/api/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ email, otp, newPassword }),
+      }),
   },
 
   // Accounts (Wallets)

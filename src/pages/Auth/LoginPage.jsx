@@ -127,9 +127,9 @@ export function LoginPage() {
                   Ingat saya
                 </label>
               </div>
-              <a href="#" className="text-sm font-medium text-zinc-900 dark:text-zinc-100 underline-offset-4 hover:underline" id="forgot-pass">
+              <Link to="/forgot-password" className="text-sm font-medium text-zinc-900 dark:text-zinc-100 underline-offset-4 hover:underline" id="forgot-pass">
                 Lupa password?
-              </a>
+              </Link>
             </div>
 
             {/* Error */}
