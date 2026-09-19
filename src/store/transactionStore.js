@@ -1,126 +1,64 @@
 import { create } from 'zustand'
-import { db } from '../lib/db.js'
-import { useAuthStore } from './authStore.js'
+import { api } from '../lib/api'
+import { useAccountStore } from './accountStore'
 import { getMonth, getYear } from 'date-fns'
 
-const getUserId = () => useAuthStore.getState().user?.id
+const normalizeTx = (t) => ({
+  ...t,
+  categoryId: t.categoryId || t.category_id,
+  accountId: t.accountId || t.account_id,
+  toAccountId: t.toAccountId || t.to_account_id,
+})
 
 export const useTransactionStore = create((set, get) => ({
   transactions: [],
   loading: false,
 
   fetchTransactions: async () => {
-    const userId = getUserId()
-    if (!userId) {
-      set({ transactions: [], loading: false })
-      return
-    }
     set({ loading: true })
-    const all = await db.transactions.where('userId').equals(userId).toArray()
-    all.sort((a, b) => new Date(b.date) - new Date(a.date))
-    set({ transactions: all, loading: false })
+    try {
+      const { transactions } = await api.transactions.getAll()
+      const normalized = (transactions || []).map(normalizeTx)
+      set({ transactions: normalized, loading: false })
+    } catch (err) {
+      set({ transactions: [], loading: false })
+    }
   },
 
   addTransaction: async (data) => {
-    const userId = getUserId()
-    const amount = Number(data.amount) || 0
-    const id = await db.transactions.add({
+    const payload = {
       ...data,
-      amount,
-      userId,
-      createdAt: new Date().toISOString(),
-    })
-    // Update account balance
-    if (data.type === 'expense') {
-      await db.accounts.where('id').equals(data.accountId).modify(acc => {
-        acc.balance = (Number(acc.balance) || 0) - amount
-      })
-    } else if (data.type === 'income') {
-      await db.accounts.where('id').equals(data.accountId).modify(acc => {
-        acc.balance = (Number(acc.balance) || 0) + amount
-      })
-    } else if (data.type === 'transfer') {
-      await db.accounts.where('id').equals(data.accountId).modify(acc => {
-        acc.balance = (Number(acc.balance) || 0) - amount
-      })
-      await db.accounts.where('id').equals(data.toAccountId).modify(acc => {
-        acc.balance = (Number(acc.balance) || 0) + amount
-      })
+      categoryId: data.categoryId,
+      accountId: data.accountId,
+      toAccountId: data.toAccountId,
+      amount: Number(data.amount) || 0,
     }
+    const { transaction } = await api.transactions.create(payload)
     await get().fetchTransactions()
-    return id
+    // Sync account balance
+    await useAccountStore.getState().fetchAccounts()
+    return transaction?.id
   },
 
   updateTransaction: async (id, data) => {
-    const oldTx = await db.transactions.get(id)
-    if (oldTx) {
-      const oldAmount = Number(oldTx.amount) || 0
-      // Revert old effect
-      if (oldTx.type === 'expense') {
-        await db.accounts.where('id').equals(oldTx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) + oldAmount
-        })
-      } else if (oldTx.type === 'income') {
-        await db.accounts.where('id').equals(oldTx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) - oldAmount
-        })
-      } else if (oldTx.type === 'transfer') {
-        await db.accounts.where('id').equals(oldTx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) + oldAmount
-        })
-        await db.accounts.where('id').equals(oldTx.toAccountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) - oldAmount
-        })
-      }
-
-      // Apply new effect
-      const newTx = { ...oldTx, ...data, amount: Number(data.amount !== undefined ? data.amount : oldTx.amount) || 0 }
-      const newAmount = newTx.amount
-      if (newTx.type === 'expense') {
-        await db.accounts.where('id').equals(newTx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) - newAmount
-        })
-      } else if (newTx.type === 'income') {
-        await db.accounts.where('id').equals(newTx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) + newAmount
-        })
-      } else if (newTx.type === 'transfer') {
-        await db.accounts.where('id').equals(newTx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) - newAmount
-        })
-        await db.accounts.where('id').equals(newTx.toAccountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) + newAmount
-        })
-      }
+    const payload = {
+      ...data,
+      categoryId: data.categoryId,
+      accountId: data.accountId,
+      toAccountId: data.toAccountId,
+      amount: Number(data.amount) || 0,
     }
-    await db.transactions.update(id, data)
+    await api.transactions.update(id, payload)
     await get().fetchTransactions()
+    // Sync account balance
+    await useAccountStore.getState().fetchAccounts()
   },
 
   deleteTransaction: async (id) => {
-    const tx = await db.transactions.get(id)
-    if (tx) {
-      const amount = Number(tx.amount) || 0
-      // Reverse balance effect
-      if (tx.type === 'expense') {
-        await db.accounts.where('id').equals(tx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) + amount
-        })
-      } else if (tx.type === 'income') {
-        await db.accounts.where('id').equals(tx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) - amount
-        })
-      } else if (tx.type === 'transfer') {
-        await db.accounts.where('id').equals(tx.accountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) + amount
-        })
-        await db.accounts.where('id').equals(tx.toAccountId).modify(acc => {
-          acc.balance = (Number(acc.balance) || 0) - amount
-        })
-      }
-    }
-    await db.transactions.delete(id)
+    await api.transactions.delete(id)
     await get().fetchTransactions()
+    // Sync account balance
+    await useAccountStore.getState().fetchAccounts()
   },
 
   // Computed: get this month's summary

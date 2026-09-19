@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "acheez",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-09-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "acheez-db",
+      "database_id": "963e934b-b4eb-48c5-b0ba-befea18bd652"
+    }
+  ],
+  "vars": {
+    "JWT_SECRET": "financeflow-super-secret-jwt-key-change-in-prod"
+  }
+}

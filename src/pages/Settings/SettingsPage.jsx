@@ -3,7 +3,7 @@ import { User, Mail, Lock, Trash2, Save, Eye, EyeOff, Plus, Edit2 } from 'lucide
 import { useAuthStore } from '../../store/authStore.js'
 import { Card, CardHeader, CardTitle, Button, Input, Modal, ConfirmModal, Badge } from '@/components/ui'
 import { CATEGORIES, ACCOUNT_COLORS } from '../../lib/constants.js'
-import { db } from '../../lib/db.js'
+import { api } from '@/lib/api'
 import { useNavigate } from 'react-router-dom'
 
 export function SettingsPage() {
@@ -20,7 +20,7 @@ export function SettingsPage() {
 
   const saveProfile = async (e) => {
     e.preventDefault()
-    updateProfile({ name: profileForm.name })
+    await updateProfile({ name: profileForm.name })
     setProfileSaved(true)
     setTimeout(() => setProfileSaved(false), 2000)
   }
@@ -28,25 +28,25 @@ export function SettingsPage() {
   const savePassword = async (e) => {
     e.preventDefault()
     setPassError('')
-    const users = JSON.parse(localStorage.getItem('ff_users') || '[]')
-    const me = users.find(u => u.id === user.id)
-    if (!me || me.password !== passForm.current) { setPassError('Password saat ini salah'); return }
     if (passForm.newPass.length < 6) { setPassError('Password baru minimal 6 karakter'); return }
     if (passForm.newPass !== passForm.confirm) { setPassError('Konfirmasi password tidak cocok'); return }
-    const idx = users.findIndex(u => u.id === user.id)
-    users[idx].password = passForm.newPass
-    localStorage.setItem('ff_users', JSON.stringify(users))
-    setPassForm({ current: '', newPass: '', confirm: '' })
-    setPassSaved(true)
-    setTimeout(() => setPassSaved(false), 2000)
+    try {
+      await api.auth.updatePassword(passForm.current, passForm.newPass)
+      setPassForm({ current: '', newPass: '', confirm: '' })
+      setPassSaved(true)
+      setTimeout(() => setPassSaved(false), 2000)
+    } catch (err) {
+      setPassError(err.message)
+    }
   }
 
   const handleReset = async () => {
     setLoading(true)
-    await db.transactions.clear()
-    await db.accounts.clear()
-    await db.budgets.clear()
-    await db.goals.clear()
+    try {
+      await api.settings.resetData()
+    } catch (err) {
+      console.error(err)
+    }
     setLoading(false)
     setShowResetConfirm(false)
     logout()

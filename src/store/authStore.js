@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { generateId } from '../lib/utils.js'
-import { seedDefaultData } from '../lib/db.js'
+import { api, setToken, removeToken } from '../lib/api'
 
 export const useAuthStore = create(
   persist(
@@ -10,40 +9,28 @@ export const useAuthStore = create(
       isAuthenticated: false,
 
       login: async (email, password) => {
-        const users = JSON.parse(localStorage.getItem('ff_users') || '[]')
-        const user = users.find(u => u.email === email && u.password === password)
-        if (!user) throw new Error('Email atau password salah')
-        const { password: _, ...safeUser } = user
-        set({ user: safeUser, isAuthenticated: true })
-        await seedDefaultData(safeUser.id)
-        return safeUser
+        const { user, token } = await api.auth.login(email, password)
+        setToken(token)
+        set({ user, isAuthenticated: true })
+        return user
       },
 
       register: async (name, email, password) => {
-        const users = JSON.parse(localStorage.getItem('ff_users') || '[]')
-        if (users.find(u => u.email === email)) throw new Error('Email sudah terdaftar')
-        const newUser = { id: generateId(), name, email, password, avatar: null, createdAt: new Date().toISOString() }
-        users.push(newUser)
-        localStorage.setItem('ff_users', JSON.stringify(users))
-        const { password: _, ...safeUser } = newUser
-        set({ user: safeUser, isAuthenticated: true })
-        await seedDefaultData(safeUser.id)
-        return safeUser
+        const { user, token } = await api.auth.register(name, email, password)
+        setToken(token)
+        set({ user, isAuthenticated: true })
+        return user
       },
 
-      logout: () => set({ user: null, isAuthenticated: false }),
+      logout: () => {
+        removeToken()
+        set({ user: null, isAuthenticated: false })
+      },
 
-      updateProfile: (updates) => {
-        const current = get().user
-        const updated = { ...current, ...updates }
-        set({ user: updated })
-        // Also update in users list
-        const users = JSON.parse(localStorage.getItem('ff_users') || '[]')
-        const idx = users.findIndex(u => u.id === current.id)
-        if (idx !== -1) {
-          users[idx] = { ...users[idx], ...updates }
-          localStorage.setItem('ff_users', JSON.stringify(users))
-        }
+      updateProfile: async (updates) => {
+        const { user } = await api.auth.updateProfile(updates)
+        set({ user })
+        return user
       },
     }),
     { name: 'ff_auth' }

@@ -1,56 +1,60 @@
 import { create } from 'zustand'
-import { db } from '../lib/db.js'
-import { useAuthStore } from './authStore.js'
+import { api } from '../lib/api'
 
-const getUserId = () => useAuthStore.getState().user?.id
+const normalizeGoal = (g) => ({
+  ...g,
+  targetAmount: Number(g.targetAmount ?? g.target_amount ?? 0),
+  currentAmount: Number(g.currentAmount ?? g.current_amount ?? 0),
+  createdAt: g.createdAt || g.created_at,
+})
 
 export const useGoalStore = create((set, get) => ({
   goals: [],
   loading: false,
 
   fetchGoals: async () => {
-    const userId = getUserId()
-    if (!userId) {
-      set({ goals: [], loading: false })
-      return
-    }
     set({ loading: true })
-    const all = await db.goals.where('userId').equals(userId).toArray()
-    all.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    set({ goals: all, loading: false })
+    try {
+      const { goals } = await api.goals.getAll()
+      const normalized = (goals || []).map(normalizeGoal)
+      set({ goals: normalized, loading: false })
+    } catch (err) {
+      set({ goals: [], loading: false })
+    }
   },
 
   addGoal: async (data) => {
-    const userId = getUserId()
-    const id = await db.goals.add({
-      ...data,
-      userId,
+    const payload = {
+      name: data.name,
       targetAmount: Number(data.targetAmount) || 0,
-      currentAmount: 0,
-      status: 'active',
-      createdAt: new Date().toISOString(),
-    })
+      currentAmount: Number(data.currentAmount) || 0,
+      deadline: data.deadline || null,
+      color: data.color || '#6366f1',
+      icon: data.icon || '🎯',
+    }
+    const { goal } = await api.goals.create(payload)
     await get().fetchGoals()
-    return id
+    return goal?.id
   },
 
   addContribution: async (goalId, amount) => {
-    const goal = await db.goals.get(goalId)
+    const goal = get().goals.find(g => g.id === goalId)
     if (!goal) return
     const addAmt = Number(amount) || 0
-    const newAmount = (Number(goal.currentAmount) || 0) + addAmt
-    const status = newAmount >= (Number(goal.targetAmount) || 0) ? 'completed' : 'active'
-    await db.goals.update(goalId, { currentAmount: newAmount, status })
+    const newAmount = goal.currentAmount + addAmt
+    await api.goals.update(goalId, {
+      currentAmount: newAmount,
+    })
     await get().fetchGoals()
   },
 
   updateGoal: async (id, data) => {
-    await db.goals.update(id, data)
+    await api.goals.update(id, data)
     await get().fetchGoals()
   },
 
   deleteGoal: async (id) => {
-    await db.goals.delete(id)
+    await api.goals.delete(id)
     await get().fetchGoals()
   },
 
