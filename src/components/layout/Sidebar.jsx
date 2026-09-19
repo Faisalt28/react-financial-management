@@ -38,12 +38,12 @@ export function Sidebar({ collapsed = false }) {
       <div className="flex items-center gap-3 px-5 py-5" style={{ minHeight: '72px' }}>
         <img
           src={logo}
-          alt="FinanceFlow Logo"
+          alt="AcheeZ Logo"
           className="w-9 h-9 object-contain flex-shrink-0"
         />
         {!collapsed && (
           <div className="animate-fade-in">
-            <p className="text-sm font-bold text-zinc-900 dark:text-white tracking-tight">FinanceFlow</p>
+            <p className="text-sm font-bold text-zinc-900 dark:text-white tracking-tight">AcheeZ</p>
             <p className="text-xs text-zinc-500">Manajemen Keuangan</p>
           </div>
         )}

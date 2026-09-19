@@ -43,11 +43,11 @@ export function Header() {
               <NavLink to="/dashboard" className="flex items-center gap-2.5 group">
                 <img
                   src={logo}
-                  alt="FinanceFlow"
+                  alt="AcheeZ"
                   className="w-8 h-8 object-contain transition-transform group-hover:scale-105"
                 />
                 <span className="font-bold text-base tracking-tight text-zinc-900 dark:text-white">
-                  FinanceFlow
+                  AcheeZ
                 </span>
               </NavLink>
 

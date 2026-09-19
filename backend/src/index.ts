@@ -30,7 +30,7 @@ app.use(
 )
 
 // Health check
-app.get('/', (c) => c.json({ status: 'ok', service: 'Financial Management API', version: '1.0.0' }))
+app.get('/', (c) => c.json({ status: 'ok', service: 'AcheeZ API', version: '1.0.0' }))
 app.get('/health', (c) => c.json({ status: 'healthy', timestamp: new Date().toISOString() }))
 
 // Mount Routers

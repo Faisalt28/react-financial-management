@@ -2,7 +2,7 @@ export async function sendOtpEmail({
   toEmail,
   otp,
   apiKey,
-  fromEmail = 'FinanceFlow <onboarding@resend.dev>',
+  fromEmail = 'AcheeZ <onboarding@resend.dev>',
 }: {
   toEmail: string
   otp: string
@@ -46,9 +46,9 @@ export async function sendOtpEmail({
             </head>
             <body>
               <div class="container">
-                <div class="logo">FinanceFlow</div>
+                <div class="logo">AcheeZ</div>
                 <div class="title">Reset Kata Sandi Anda</div>
-                <div class="desc">Kami menerima permintaan untuk mereset kata sandi akun FinanceFlow Anda. Gunakan kode verifikasi (OTP) di bawah ini untuk melanjutkan:</div>
+                <div class="desc">Kami menerima permintaan untuk mereset kata sandi akun AcheeZ Anda. Gunakan kode verifikasi (OTP) di bawah ini untuk melanjutkan:</div>
                 <div class="otp-box">${otp}</div>
                 <div class="desc" style="margin-bottom:0">Kode ini hanya berlaku selama <strong>15 menit</strong>. Jangan berikan kode ini kepada siapapun.</div>
                 <div class="footer">Jika Anda tidak meminta reset kata sandi, abaikan email ini.</div>

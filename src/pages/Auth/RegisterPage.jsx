@@ -65,7 +65,7 @@ export function RegisterPage() {
             <div className="my-2 flex justify-center">
               <img
                 src={logo}
-                alt="FinanceFlow Logo"
+                alt="AcheeZ Logo"
                 className="w-20 h-20 object-contain drop-shadow-md"
               />
             </div>
@@ -73,7 +73,7 @@ export function RegisterPage() {
               Buat Akun Baru
             </h1>
             <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
-              Mulai atur keuangan cerdas bersama FinanceFlow
+              Mulai atur keuangan cerdas bersama AcheeZ
             </p>
           </div>
 

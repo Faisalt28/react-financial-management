@@ -95,7 +95,7 @@ export function ForgotPasswordPage() {
             <div className="my-2 flex justify-center">
               <img
                 src={logo}
-                alt="FinanceFlow Logo"
+                alt="AcheeZ Logo"
                 className="w-20 h-20 object-contain drop-shadow-md"
               />
             </div>
