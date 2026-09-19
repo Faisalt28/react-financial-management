@@ -60,19 +60,13 @@ export function DashboardPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Top Greeting Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-            Halo, {user?.name?.split(' ')[0] || 'Teman'} 👋
-          </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            Ringkasan kesehatan finansial & arus kas Anda periode {currentMonthName}.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Cloud Sync Aktif</span>
-        </div>
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          Halo, {user?.name?.split(' ')[0] || 'Teman'} 👋
+        </h1>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          Ringkasan kesehatan finansial & arus kas Anda periode {currentMonthName}.
+        </p>
       </div>
 
       {/* Bento Grid Architecture */}
