@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 import { api } from '../lib/api'
+import { useAccountStore } from './accountStore'
+import { useTransactionStore } from './transactionStore'
 
 const normalizeGoal = (g) => ({
   ...g,
@@ -35,6 +37,15 @@ export const useGoalStore = create((set, get) => ({
     const { goal } = await api.goals.create(payload)
     await get().fetchGoals()
     return goal?.id
+  },
+
+  depositToGoal: async (goalId, { accountId, amount, note }) => {
+    const res = await api.goals.deposit(goalId, { accountId, amount, note })
+    await get().fetchGoals()
+    // Sync account balance & transactions across app
+    await useAccountStore.getState().fetchAccounts()
+    await useTransactionStore.getState().fetchTransactions()
+    return res
   },
 
   addContribution: async (goalId, amount) => {

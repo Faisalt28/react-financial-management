@@ -157,6 +157,11 @@ export const api = {
       request<{ success: boolean }>(`/api/goals/${id}`, {
         method: 'DELETE',
       }),
+    deposit: (id: string, data: { accountId: string; amount: number; note?: string }) =>
+      request<{ success: boolean; goal: any; account: any; transactionId: string }>(`/api/goals/${id}/deposit`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
   },
 
   // Settings
