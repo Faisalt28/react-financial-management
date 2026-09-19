@@ -276,9 +276,9 @@ export function DashboardPage() {
             BENTO 5: LAPORAN & ANALISIS (SPAN 1 COL)
             ========================================================= */}
         <BentoCard
-          name="Laporan & Ekspor"
+          name="Laporan & Analisis"
           className="lg:col-span-1"
-          description="Visualisasi grafik tren keuangan serta ekspor file PDF / Excel."
+          description="Visualisasi grafik arus kas, tren pengeluaran, serta analitik bulanan."
           Icon={BarChart3}
           href="/reports"
           cta="Buka Laporan Lengkap"
@@ -298,7 +298,7 @@ export function DashboardPage() {
             </div>
 
             <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Unduh laporan bulanan lengkap dengan neraca transaksi terperinci siap cetak.
+              Analisis laporan bulanan lengkap dengan neraca mutasi transaksi terperinci.
             </p>
           </div>
         </BentoCard>

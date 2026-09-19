@@ -3,22 +3,19 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts'
-import { ChevronLeft, ChevronRight, Download } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTransactionStore } from '../../store/transactionStore.js'
-import { Card, CardHeader, CardTitle, Button, StatCard } from '@/components/ui'
+import { Card, CardHeader, CardTitle, StatCard } from '@/components/ui'
 import { formatCurrency, formatCompact, CATEGORIES } from '../../lib/constants.js'
 import { getCategoryById, getLastNMonths } from '../../lib/utils.js'
 import { getMonth, getYear, subMonths, format } from 'date-fns'
 import { id as idLocale } from 'date-fns/locale'
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
-import * as XLSX from 'xlsx'
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="glass-card p-3 text-xs shadow-xl border-brand-500/20">
-        <p className="text-slate-400 mb-1.5 font-medium">{label}</p>
+      <div className="p-3 text-xs shadow-xl rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+        <p className="text-zinc-500 dark:text-zinc-400 mb-1.5 font-medium">{label}</p>
         {payload.map(p => (
           <p key={p.name} style={{ color: p.color }}>{p.name}: {formatCurrency(p.value)}</p>
         ))}
@@ -69,74 +66,32 @@ export function ReportsPage() {
     .map(([day, amount]) => ({ name: `${day}`, Pengeluaran: amount }))
     .sort((a, b) => Number(a.name) - Number(b.name))
 
-  // Export PDF
-  const exportPDF = () => {
-    const doc = new jsPDF()
-    doc.setFontSize(18)
-    doc.text(`Laporan Keuangan — ${format(currentDate, 'MMMM yyyy', { locale: idLocale })}`, 14, 22)
-    doc.setFontSize(11)
-    doc.text(`Pemasukan: ${formatCurrency(summary.income)}`, 14, 35)
-    doc.text(`Pengeluaran: ${formatCurrency(summary.expense)}`, 14, 42)
-    doc.text(`Net: ${formatCurrency(summary.net)}`, 14, 49)
-    doc.autoTable({
-      startY: 58,
-      head: [['Tanggal', 'Tipe', 'Kategori', 'Catatan', 'Jumlah']],
-      body: monthTx.map(t => [
-        t.date,
-        t.type === 'income' ? 'Pemasukan' : t.type === 'expense' ? 'Pengeluaran' : 'Transfer',
-        getCategoryById(t.categoryId).name,
-        t.note || '-',
-        formatCurrency(t.amount),
-      ]),
-      styles: { fontSize: 9 },
-      headStyles: { fillColor: [79, 70, 229] },
-    })
-    doc.save(`laporan-${format(currentDate, 'yyyy-MM', { locale: idLocale })}.pdf`)
-  }
-
-  // Export Excel
-  const exportExcel = () => {
-    const data = monthTx.map(t => ({
-      Tanggal: t.date,
-      Tipe: t.type === 'income' ? 'Pemasukan' : t.type === 'expense' ? 'Pengeluaran' : 'Transfer',
-      Kategori: getCategoryById(t.categoryId).name,
-      Catatan: t.note || '',
-      Jumlah: t.amount,
-    }))
-    const ws = XLSX.utils.json_to_sheet(data)
-    const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Transaksi')
-    XLSX.writeFile(wb, `laporan-${format(currentDate, 'yyyy-MM')}.xlsx`)
-  }
-
   return (
-    <div className="space-y-5 animate-fade-in">
+    <div className="space-y-6 animate-fade-in">
       {/* Month navigation */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-2xs">
         <div className="flex items-center gap-2">
-          <button onClick={() => setCurrentDate(d => subMonths(d, 1))} id="rep-prev-month"
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+          <button
+            onClick={() => setCurrentDate(d => subMonths(d, 1))}
+            id="rep-prev-month"
+            className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+          >
             <ChevronLeft size={20} />
           </button>
-          <span className="text-lg font-bold text-white min-w-[180px] text-center">
+          <span className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white min-w-[160px] sm:min-w-[180px] text-center">
             {format(currentDate, 'MMMM yyyy', { locale: idLocale })}
           </span>
-          <button onClick={() => setCurrentDate(d => {
-            const next = new Date(d)
-            next.setMonth(next.getMonth() + 1)
-            return next
-          })} id="rep-next-month"
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+          <button
+            onClick={() => setCurrentDate(d => {
+              const next = new Date(d)
+              next.setMonth(next.getMonth() + 1)
+              return next
+            })}
+            id="rep-next-month"
+            className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+          >
             <ChevronRight size={20} />
           </button>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={exportPDF} id="export-pdf">
-            <Download size={14} /> PDF
-          </Button>
-          <Button variant="outline" size="sm" onClick={exportExcel} id="export-excel">
-            <Download size={14} /> Excel
-          </Button>
         </div>
       </div>
 

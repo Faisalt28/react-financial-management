@@ -20,7 +20,6 @@ export default defineConfig({
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom', 'zustand'],
           'vendor-charts': ['recharts'],
-          'vendor-export': ['jspdf', 'jspdf-autotable', 'xlsx'],
           'vendor-icons': ['lucide-react'],
         },
       },
