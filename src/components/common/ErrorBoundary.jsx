@@ -40,9 +40,9 @@ export class ErrorBoundary extends React.Component {
               Aplikasi mengalami kendala teknis tak terduga. Data Anda di perangkat tetap aman.
             </p>
 
-            {process.env.NODE_ENV !== 'production' && this.state.error && (
-              <pre className="text-left text-xs bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg overflow-x-auto text-rose-500 mb-6 max-h-32">
-                {this.state.error.toString()}
+            {this.state.error && (
+              <pre className="text-left text-xs bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg overflow-x-auto text-rose-500 mb-6 max-h-32 whitespace-pre-wrap break-all">
+                {this.state.error?.toString()}
               </pre>
             )}
 

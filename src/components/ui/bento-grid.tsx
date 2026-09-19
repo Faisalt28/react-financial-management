@@ -1,4 +1,5 @@
 import { ReactNode, ElementType } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -79,17 +80,13 @@ const BentoCard = ({
       )}
 
       <div className="pt-3 mt-auto flex items-center justify-between border-t border-zinc-100 dark:border-zinc-900/80">
-        <Button
-          variant="ghost"
-          asChild
-          size="sm"
-          className="text-xs font-semibold text-zinc-900 dark:text-white hover:text-black hover:bg-zinc-100 dark:hover:bg-zinc-900 p-0 h-auto"
+        <Link
+          to={href}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-900 dark:text-white hover:text-black dark:hover:text-zinc-200 transition-colors py-1"
         >
-          <a href={href} className="inline-flex items-center gap-1.5">
-            {cta}
-            <ArrowRightIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-          </a>
-        </Button>
+          {cta}
+          <ArrowRightIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+        </Link>
       </div>
     </div>
 
