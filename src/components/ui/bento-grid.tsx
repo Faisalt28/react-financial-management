@@ -2,7 +2,6 @@ import { ReactNode, ElementType } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
 interface BentoGridProps {
   children: ReactNode;
@@ -13,7 +12,7 @@ const BentoGrid = ({ children, className }: BentoGridProps) => {
   return (
     <div
       className={cn(
-        "grid w-full auto-rows-[22rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
+        "grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto",
         className
       )}
     >
@@ -46,17 +45,18 @@ const BentoCard = ({
   <div
     key={name}
     className={cn(
-      "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 transition-all duration-300",
+      "group relative flex flex-col justify-between rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 transition-all duration-300",
       "bg-white shadow-xs hover:shadow-lg hover:border-zinc-300",
       "dark:bg-zinc-950 dark:hover:border-zinc-700 dark:[box-shadow:0_-20px_80px_-20px_#ffffff0f_inset]",
+      "min-h-[18rem] h-full",
       className
     )}
   >
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none rounded-2xl">
       {background}
     </div>
 
-    <div className="relative z-10 flex flex-col justify-between h-full p-6 transition-all duration-300">
+    <div className="relative z-10 flex flex-col justify-between h-full p-5 sm:p-6 transition-all duration-300">
       <div>
         <div className="flex items-center justify-between mb-3">
           {Icon && (
@@ -65,16 +65,16 @@ const BentoCard = ({
             </div>
           )}
         </div>
-        <h3 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-1">
+        <h3 className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-1">
           {name}
         </h3>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">
+        <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
           {description}
         </p>
       </div>
 
       {children && (
-        <div className="my-auto py-2 z-10">
+        <div className="my-3 py-1 z-10">
           {children}
         </div>
       )}
@@ -90,8 +90,9 @@ const BentoCard = ({
       </div>
     </div>
 
-    <div className="pointer-events-none absolute inset-0 transition-colors duration-300 group-hover:bg-black/[0.02] dark:group-hover:bg-white/[0.02]" />
+    <div className="pointer-events-none absolute inset-0 rounded-2xl transition-colors duration-300 group-hover:bg-black/[0.02] dark:group-hover:bg-white/[0.02]" />
   </div>
 );
 
 export { BentoCard, BentoGrid };
+

@@ -80,7 +80,7 @@ export function DashboardPage() {
             ========================================================= */}
         <BentoCard
           name="Total Kekayaan & Saldo"
-          className="lg:col-span-2 auto-rows-[22rem]"
+          className="lg:col-span-2"
           description="Akumulasi seluruh dana aktif di rekening bank, dompet tunai, dan e-wallet Anda."
           Icon={Wallet}
           href="/accounts"
@@ -107,7 +107,7 @@ export function DashboardPage() {
                   className="p-3 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/60 flex flex-col justify-between shadow-2xs"
                 >
                   <div className="flex items-center justify-between text-xs text-zinc-500 mb-1.5">
-                    <span className="font-medium truncate max-w-[100px]">{acc.name}</span>
+                    <span className="font-medium truncate">{acc.name}</span>
                     <span>{acc.icon || '💳'}</span>
                   </div>
                   <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
@@ -308,7 +308,7 @@ export function DashboardPage() {
             ========================================================= */}
         <BentoCard
           name="Riwayat Transaksi Terkini"
-          className="lg:col-span-3 auto-rows-auto min-h-[16rem]"
+          className="lg:col-span-3 min-h-[16rem]"
           description="Daftar mutasi dana terkini yang dicatat ke dalam buku kas Anda."
           Icon={ArrowRightLeft}
           href="/transactions"
