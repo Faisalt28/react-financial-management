@@ -12,7 +12,7 @@ const BentoGrid = ({ children, className }: BentoGridProps) => {
   return (
     <div
       className={cn(
-        "grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto",
+        "grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch",
         className
       )}
     >
@@ -48,7 +48,6 @@ const BentoCard = ({
       "group relative flex flex-col justify-between rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 transition-all duration-300",
       "bg-white shadow-xs hover:shadow-lg hover:border-zinc-300",
       "dark:bg-zinc-950 dark:hover:border-zinc-700 dark:[box-shadow:0_-20px_80px_-20px_#ffffff0f_inset]",
-      "min-h-[18rem] h-full",
       className
     )}
   >
@@ -56,7 +55,7 @@ const BentoCard = ({
       {background}
     </div>
 
-    <div className="relative z-10 flex flex-col justify-between h-full p-5 sm:p-6 transition-all duration-300">
+    <div className="relative z-10 flex flex-col justify-between flex-1 p-5 sm:p-6 transition-all duration-300">
       <div>
         <div className="flex items-center justify-between mb-3">
           {Icon && (
@@ -74,7 +73,7 @@ const BentoCard = ({
       </div>
 
       {children && (
-        <div className="my-3 py-1 z-10">
+        <div className="my-4 z-10">
           {children}
         </div>
       )}

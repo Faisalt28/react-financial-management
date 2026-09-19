@@ -136,41 +136,37 @@ export function DashboardPage() {
             <div className="absolute right-0 bottom-0 w-48 h-48 rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 blur-2xl pointer-events-none" />
           }
         >
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {/* Pemasukan */}
-            <div className="flex items-center justify-between p-2.5 rounded-xl border border-emerald-500/15 bg-emerald-500/5">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between p-3 rounded-xl border border-emerald-500/15 bg-emerald-500/5">
+              <div className="flex items-center gap-2.5">
                 <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                   <ArrowDownRight size={16} />
                 </div>
-                <div>
-                  <p className="text-xs text-zinc-500">Pemasukan</p>
-                  <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                    +{formatCurrency(thisMonth.income)}
-                  </p>
-                </div>
+                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Pemasukan</span>
               </div>
+              <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                +{formatCurrency(thisMonth.income)}
+              </span>
             </div>
 
             {/* Pengeluaran */}
-            <div className="flex items-center justify-between p-2.5 rounded-xl border border-rose-500/15 bg-rose-500/5">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between p-3 rounded-xl border border-rose-500/15 bg-rose-500/5">
+              <div className="flex items-center gap-2.5">
                 <div className="p-1.5 rounded-lg bg-rose-500/20 text-rose-600 dark:text-rose-400">
                   <ArrowUpRight size={16} />
                 </div>
-                <div>
-                  <p className="text-xs text-zinc-500">Pengeluaran</p>
-                  <p className="text-sm font-bold text-rose-600 dark:text-rose-400">
-                    -{formatCurrency(thisMonth.expense)}
-                  </p>
-                </div>
+                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Pengeluaran</span>
               </div>
+              <span className="text-sm font-bold text-rose-600 dark:text-rose-400">
+                -{formatCurrency(thisMonth.expense)}
+              </span>
             </div>
 
             {/* Sisa Bersih */}
-            <div className="pt-1 flex items-center justify-between text-xs text-zinc-500">
-              <span>Sisa Bersih:</span>
-              <span className={`font-semibold ${thisMonth.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+            <div className="pt-1.5 px-1 flex items-center justify-between text-xs text-zinc-500">
+              <span className="font-medium">Sisa Bersih:</span>
+              <span className={`font-bold text-sm ${thisMonth.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                 {thisMonth.net >= 0 ? '+' : ''}{formatCurrency(thisMonth.net)}
               </span>
             </div>
@@ -308,7 +304,7 @@ export function DashboardPage() {
             ========================================================= */}
         <BentoCard
           name="Riwayat Transaksi Terkini"
-          className="lg:col-span-3 min-h-[16rem]"
+          className="lg:col-span-3"
           description="Daftar mutasi dana terkini yang dicatat ke dalam buku kas Anda."
           Icon={ArrowRightLeft}
           href="/transactions"
@@ -324,23 +320,23 @@ export function DashboardPage() {
               const isExpense = tx.type === 'expense'
 
               return (
-                <div key={tx.id} className="py-2.5 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 flex-shrink-0">
+                <div key={tx.id} className="py-3 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 flex-shrink-0">
                       {cat.icon}
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
                         {tx.note || cat.name}
                       </p>
-                      <p className="text-xs text-zinc-400">
+                      <p className="text-xs text-zinc-400 mt-0.5">
                         {formatDate(tx.date)} &bull; {cat.name}
                       </p>
                     </div>
                   </div>
 
                   <div className="text-right flex-shrink-0">
-                    <p className={`text-sm font-bold ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-blue-500'}`}>
+                    <p className={`text-sm sm:text-base font-bold ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-blue-500'}`}>
                       {isIncome ? '+' : isExpense ? '-' : ''}{formatCurrency(tx.amount)}
                     </p>
                   </div>
@@ -349,7 +345,7 @@ export function DashboardPage() {
             })}
 
             {recentTransactions.length === 0 && (
-              <div className="py-6 text-center text-xs text-zinc-400">
+              <div className="py-8 text-center text-xs text-zinc-400">
                 Belum ada mutasi transaksi yang tercatat.
               </div>
             )}
