@@ -2,10 +2,12 @@ import { create } from 'zustand'
 import { api } from '../lib/api'
 import { useAccountStore } from './accountStore'
 import { getMonth, getYear } from 'date-fns'
+import { parseTxDate } from '../lib/utils'
 
 const normalizeTx = (t) => ({
   ...t,
-  categoryId: t.categoryId || t.category_id,
+  amount: Number(t.amount) || 0,
+  categoryId: t.categoryId === 'other' ? 'other_expense' : (t.categoryId || t.category_id || 'other_expense'),
   accountId: t.accountId || t.account_id,
   toAccountId: t.toAccountId || t.to_account_id,
 })
@@ -65,10 +67,10 @@ export const useTransactionStore = create((set, get) => ({
   getMonthSummary: (month, year) => {
     const { transactions } = get()
     const now = new Date()
-    const m = month ?? getMonth(now)
-    const y = year ?? getYear(now)
+    const m = month !== undefined && month !== null ? month : getMonth(now)
+    const y = year !== undefined && year !== null ? year : getYear(now)
     const filtered = transactions.filter(tx => {
-      const d = new Date(tx.date)
+      const d = parseTxDate(tx.date)
       return getMonth(d) === m && getYear(d) === y
     })
     const income = filtered.filter(t => t.type === 'income').reduce((s, t) => s + (Number(t.amount) || 0), 0)
@@ -85,15 +87,16 @@ export const useTransactionStore = create((set, get) => ({
   getSpendingByCategory: (month, year) => {
     const { transactions } = get()
     const now = new Date()
-    const m = month ?? getMonth(now)
-    const y = year ?? getYear(now)
+    const m = month !== undefined && month !== null ? month : getMonth(now)
+    const y = year !== undefined && year !== null ? year : getYear(now)
     const filtered = transactions.filter(tx => {
-      const d = new Date(tx.date)
+      const d = parseTxDate(tx.date)
       return tx.type === 'expense' && getMonth(d) === m && getYear(d) === y
     })
     const map = {}
     filtered.forEach(tx => {
-      map[tx.categoryId] = (map[tx.categoryId] || 0) + (Number(tx.amount) || 0)
+      const catId = tx.categoryId === 'other' ? 'other_expense' : (tx.categoryId || 'other_expense')
+      map[catId] = (map[catId] || 0) + (Number(tx.amount) || 0)
     })
     return map
   },

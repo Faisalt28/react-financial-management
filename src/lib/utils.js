@@ -7,10 +7,23 @@ import { CATEGORIES } from './constants.js'
 // Merge class names (standard shadcn cn helper)
 export const cn = (...inputs) => twMerge(clsx(inputs))
 
+// Parse transaction date safely without UTC timezone shift
+export const parseTxDate = (dateVal) => {
+  if (!dateVal) return new Date()
+  if (dateVal instanceof Date) return dateVal
+  if (typeof dateVal === 'string') {
+    const match = dateVal.match(/^(\d{4})-(\d{2})-(\d{2})/)
+    if (match) {
+      return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+    }
+  }
+  return new Date(dateVal)
+}
+
 // Format tanggal
 export const formatDate = (date, fmt = 'dd MMM yyyy') => {
   if (!date) return '-'
-  const d = typeof date === 'string' ? parseISO(date) : date
+  const d = parseTxDate(date)
   if (!isValid(d)) return '-'
   return format(d, fmt, { locale: idLocale })
 }
@@ -44,7 +57,10 @@ export const getLastNMonths = (n = 6) => {
 
 // Get category by id
 export const getCategoryById = (id) => {
-  return CATEGORIES.find(c => c.id === id) || { name: 'Tidak Diketahui', icon: '❓', color: '#94a3b8' }
+  const targetId = id === 'other' ? 'other_expense' : id
+  const found = CATEGORIES.find(c => c.id === targetId)
+  if (found) return found
+  return { id: id || 'other_expense', name: 'Lainnya', icon: '💸', color: '#94a3b8', type: 'expense' }
 }
 
 // Generate unique ID

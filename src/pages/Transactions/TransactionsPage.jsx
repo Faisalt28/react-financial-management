@@ -5,7 +5,7 @@ import { useAccountStore } from '../../store/accountStore.js'
 import { TransactionModal } from '../../components/forms/TransactionModal.jsx'
 import { ConfirmModal, Button, Input, Select, Badge, EmptyState, Spinner } from '@/components/ui'
 import { formatCurrency, formatCompact, CATEGORIES } from '../../lib/constants.js'
-import { formatDate, getCategoryById } from '../../lib/utils.js'
+import { formatDate, getCategoryById, parseTxDate } from '../../lib/utils.js'
 
 const ITEMS_PER_PAGE = 15
 
@@ -40,7 +40,7 @@ export function TransactionsPage() {
       if (filters.categoryId && tx.categoryId !== filters.categoryId) return false
       if (filters.accountId && tx.accountId !== filters.accountId) return false
       if (filters.month) {
-        const d = new Date(tx.date)
+        const d = parseTxDate(tx.date)
         const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
         if (ym !== filters.month) return false
       }
@@ -64,49 +64,65 @@ export function TransactionsPage() {
     setShowModal(true)
   }
 
-  const income = filtered.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0)
-  const expense = filtered.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0)
+  const income = filtered
+    .filter(t => t.type === 'income')
+    .reduce((s, t) => s + (Number(t.amount) || 0), 0)
+  const expense = filtered
+    .filter(t => t.type === 'expense')
+    .reduce((s, t) => s + (Number(t.amount) || 0), 0)
+  const net = income - expense
 
   return (
     <div className="space-y-5 animate-fade-in">
-      {/* Summary */}
-      <div className="grid grid-cols-3 gap-3">
+      {/* Summary - Fully responsive cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
           { label: 'Pemasukan', value: income, color: '#10b981', prefix: '+' },
           { label: 'Pengeluaran', value: expense, color: '#f43f5e', prefix: '-' },
-          { label: 'Selisih', value: income - expense, color: income - expense >= 0 ? '#6366f1' : '#f43f5e', prefix: '' },
+          {
+            label: 'Sisa Bersih (Net)',
+            value: net,
+            color: net >= 0 ? '#10b981' : '#f43f5e',
+            prefix: net >= 0 ? '+' : ''
+          },
         ].map(s => (
-          <div key={s.label} className="glass-card p-4 text-center">
-            <p className="text-xs text-slate-500 mb-1">{s.label}</p>
-            <p className="text-lg font-bold" style={{ color: s.color }}>
+          <div
+            key={s.label}
+            className="p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-center shadow-xs"
+          >
+            <p className="text-xs text-zinc-500 mb-1 font-medium">{s.label}</p>
+            <p className="text-xl font-bold" style={{ color: s.color }}>
               {s.prefix}{formatCompact(Math.abs(s.value))}
             </p>
-            <p className="text-xs text-slate-600">{formatCurrency(Math.abs(s.value))}</p>
+            <p className="text-xs text-zinc-400 mt-0.5 font-medium">
+              {s.prefix}{formatCurrency(Math.abs(s.value))}
+            </p>
           </div>
         ))}
       </div>
 
       {/* Filters */}
-      <div className="glass-card p-4 space-y-3">
-        <div className="flex items-center gap-3">
+      <div className="p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
           <div className="flex-1">
             <Input
-              placeholder="Cari transaksi..."
+              placeholder="Cari catatan transaksi..."
               value={filters.search}
               onChange={e => setFilter('search', e.target.value)}
-              icon={<Search size={14} />}
+              icon={<Search size={15} />}
               id="tx-search"
             />
           </div>
           <Button
             onClick={() => { setEditData(null); setShowModal(true) }}
-            size="sm"
             id="add-tx-btn"
+            className="flex-shrink-0"
           >
-            <Plus size={16} /> Tambah
+            <Plus size={16} /> Tambah Transaksi
           </Button>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           <Select value={filters.type} onChange={e => setFilter('type', e.target.value)} id="filter-type">
             <option value="">Semua Tipe</option>
             <option value="income">Pemasukan</option>
@@ -130,8 +146,8 @@ export function TransactionsPage() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="glass-card overflow-hidden">
+      {/* Transaction List / Table */}
+      <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden shadow-xs">
         {loading ? (
           <div className="flex justify-center py-16"><Spinner /></div>
         ) : paginated.length === 0 ? (
@@ -143,70 +159,167 @@ export function TransactionsPage() {
           />
         ) : (
           <div>
-            {/* Header */}
-            <div className="grid grid-cols-12 gap-2 px-5 py-3 border-b border-white/5 text-xs font-medium text-slate-500 uppercase tracking-wider">
-              <div className="col-span-4">Transaksi</div>
-              <div className="col-span-2">Kategori</div>
-              <div className="col-span-2">Akun</div>
-              <div className="col-span-2">Tanggal</div>
-              <div className="col-span-1 text-right">Jumlah</div>
-              <div className="col-span-1"></div>
+            {/* Desktop Table View (Hidden on mobile) */}
+            <div className="hidden md:block">
+              {/* Header */}
+              <div className="grid grid-cols-12 gap-2 px-5 py-3.5 border-b border-zinc-100 dark:border-zinc-800 text-xs font-semibold text-zinc-400 uppercase tracking-wider bg-zinc-50/50 dark:bg-zinc-900/30">
+                <div className="col-span-4">Transaksi</div>
+                <div className="col-span-2">Kategori</div>
+                <div className="col-span-2">Akun</div>
+                <div className="col-span-2">Tanggal</div>
+                <div className="col-span-1 text-right">Jumlah</div>
+                <div className="col-span-1 text-right pr-2">Aksi</div>
+              </div>
+
+              {paginated.map((tx) => {
+                const cat = getCategoryById(tx.categoryId)
+                const acc = accounts.find(a => a.id === tx.accountId)
+                const isIncome = tx.type === 'income'
+                const isExpense = tx.type === 'expense'
+
+                return (
+                  <div
+                    key={tx.id}
+                    className="grid grid-cols-12 gap-2 px-5 py-4 border-b border-zinc-100 dark:border-zinc-900 hover:bg-zinc-50/60 dark:hover:bg-zinc-900/40 transition-colors items-center"
+                  >
+                    <div className="col-span-4 flex items-center gap-3 min-w-0">
+                      <div
+                        className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                        style={{ background: cat.color + '15' }}
+                      >
+                        {tx.type === 'transfer' ? '↔️' : cat.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
+                          {tx.note || cat.name}
+                        </p>
+                        <div className="mt-0.5">
+                          <Badge variant={tx.type}>
+                            {isIncome ? 'Pemasukan' : isExpense ? 'Pengeluaran' : 'Transfer'}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-span-2 text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 truncate">
+                      <span>{cat.icon}</span> <span>{cat.name}</span>
+                    </div>
+                    <div className="col-span-2 text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 truncate">
+                      <span>{acc?.icon || '💳'}</span> <span>{acc?.name || '-'}</span>
+                    </div>
+                    <div className="col-span-2 text-xs text-zinc-500 dark:text-zinc-400">
+                      {formatDate(tx.date)}
+                    </div>
+                    <div className={`col-span-1 text-right font-bold text-sm ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-blue-500'}`}>
+                      {isIncome ? '+' : isExpense ? '-' : ''}
+                      {formatCompact(tx.amount)}
+                    </div>
+                    <div className="col-span-1 flex justify-end gap-1">
+                      <button
+                        onClick={() => handleEdit(tx)}
+                        id={`edit-tx-${tx.id}`}
+                        className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                        title="Edit Transaksi"
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        onClick={() => setDeleteId(tx.id)}
+                        id={`delete-tx-${tx.id}`}
+                        className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+                        title="Hapus Transaksi"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-            {paginated.map((tx, idx) => {
-              const cat = getCategoryById(tx.categoryId)
-              const acc = accounts.find(a => a.id === tx.accountId)
-              return (
-                <div
-                  key={tx.id}
-                  className="grid grid-cols-12 gap-2 px-5 py-4 border-b border-white/3 hover:bg-white/2 transition-colors items-center"
-                  style={{ animationDelay: `${idx * 0.03}s` }}
-                >
-                  <div className="col-span-4 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-                      style={{ background: cat.color + '15' }}>
-                      {tx.type === 'transfer' ? '↔️' : cat.icon}
+
+            {/* Mobile Card List View (Visible only on mobile / small screens) */}
+            <div className="block md:hidden divide-y divide-zinc-100 dark:divide-zinc-900">
+              {paginated.map((tx) => {
+                const cat = getCategoryById(tx.categoryId)
+                const acc = accounts.find(a => a.id === tx.accountId)
+                const isIncome = tx.type === 'income'
+                const isExpense = tx.type === 'expense'
+
+                return (
+                  <div key={tx.id} className="p-4 space-y-2.5 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors">
+                    {/* Top Row: Icon, Note/Category, Amount */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 shadow-2xs"
+                          style={{ background: cat.color + '15' }}
+                        >
+                          {tx.type === 'transfer' ? '↔️' : cat.icon}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                            {tx.note || cat.name}
+                          </p>
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                            <span>{cat.icon} {cat.name}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-right flex-shrink-0">
+                        <p className={`text-base font-black ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-blue-500'}`}>
+                          {isIncome ? '+' : isExpense ? '-' : ''}{formatCurrency(tx.amount)}
+                        </p>
+                        <div className="mt-0.5 flex justify-end">
+                          <Badge variant={tx.type}>
+                            {isIncome ? 'Pemasukan' : isExpense ? 'Pengeluaran' : 'Transfer'}
+                          </Badge>
+                        </div>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-300 truncate">{tx.note || cat.name}</p>
-                      <Badge variant={tx.type}>{tx.type === 'income' ? 'Pemasukan' : tx.type === 'expense' ? 'Pengeluaran' : 'Transfer'}</Badge>
+
+                    {/* Bottom Row: Account, Date, and Actions */}
+                    <div className="flex items-center justify-between pt-1 border-t border-zinc-100 dark:border-zinc-900/80 text-xs text-zinc-400">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1 text-zinc-600 dark:text-zinc-300 font-medium">
+                          {acc?.icon || '💳'} {acc?.name || '-'}
+                        </span>
+                        <span>&bull;</span>
+                        <span>{formatDate(tx.date)}</span>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => handleEdit(tx)}
+                          id={`edit-mobile-tx-${tx.id}`}
+                          className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                          aria-label="Edit"
+                        >
+                          <Edit2 size={15} />
+                        </button>
+                        <button
+                          onClick={() => setDeleteId(tx.id)}
+                          id={`delete-mobile-tx-${tx.id}`}
+                          className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+                          aria-label="Hapus"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className="col-span-2 text-xs text-slate-500">{cat.icon} {cat.name}</div>
-                  <div className="col-span-2 text-xs text-slate-500">{acc?.icon} {acc?.name || '-'}</div>
-                  <div className="col-span-2 text-xs text-slate-500">{formatDate(tx.date)}</div>
-                  <div className={`col-span-1 text-right font-semibold text-sm ${tx.type === 'income' ? 'text-emerald-400' : tx.type === 'expense' ? 'text-rose-400' : 'text-brand-400'}`}>
-                    {tx.type === 'income' ? '+' : tx.type === 'expense' ? '-' : ''}
-                    {formatCompact(tx.amount)}
-                  </div>
-                  <div className="col-span-1 flex justify-end gap-1">
-                    <button
-                      onClick={() => handleEdit(tx)}
-                      id={`edit-tx-${tx.id}`}
-                      className="p-1.5 rounded-lg text-slate-600 hover:text-brand-400 hover:bg-brand-500/10 transition-colors"
-                    >
-                      <Edit2 size={13} />
-                    </button>
-                    <button
-                      onClick={() => setDeleteId(tx.id)}
-                      id={`delete-tx-${tx.id}`}
-                      className="p-1.5 rounded-lg text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between px-5 py-4">
-                <p className="text-xs text-slate-500">{filtered.length} transaksi ditemukan</p>
-                <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-4 border-t border-zinc-100 dark:border-zinc-800">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">{filtered.length} transaksi ditemukan</p>
+                <div className="flex items-center gap-2">
                   <Button variant="secondary" size="sm" onClick={() => setPage(p => p - 1)} disabled={page === 1} id="prev-page">
                     ← Prev
                   </Button>
-                  <span className="flex items-center px-3 text-xs text-slate-400">{page} / {totalPages}</span>
+                  <span className="flex items-center px-3 text-xs font-medium text-zinc-600 dark:text-zinc-400">{page} / {totalPages}</span>
                   <Button variant="secondary" size="sm" onClick={() => setPage(p => p + 1)} disabled={page === totalPages} id="next-page">
                     Next →
                   </Button>

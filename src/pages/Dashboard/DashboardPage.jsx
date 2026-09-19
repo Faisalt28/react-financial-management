@@ -12,7 +12,7 @@ import { useAccountStore } from '@/store/accountStore.js'
 import { useBudgetStore } from '@/store/budgetStore.js'
 import { useGoalStore } from '@/store/goalStore.js'
 import { formatCurrency, formatCompact } from '@/lib/constants.js'
-import { formatDate, getCategoryById, calcProgress, getBudgetStatus } from '@/lib/utils.js'
+import { formatDate, getCategoryById, calcProgress, getBudgetStatus, parseTxDate } from '@/lib/utils.js'
 import { getMonth, getYear, format } from 'date-fns'
 import { id as idLocale } from 'date-fns/locale'
 
@@ -45,12 +45,14 @@ export function DashboardPage() {
     const currentMonth = getMonth(now)
     const currentYear = getYear(now)
     const filtered = transactions.filter(t => {
-      const d = new Date(t.date)
+      const d = parseTxDate(t.date)
       return t.type === 'expense' && getMonth(d) === currentMonth && getYear(d) === currentYear
     })
     const map = {}
     filtered.forEach(t => {
-      map[t.categoryId] = (map[t.categoryId] || 0) + t.amount
+      const amt = Number(t.amount) || 0
+      const catId = t.categoryId === 'other' ? 'other_expense' : (t.categoryId || 'other_expense')
+      map[catId] = (map[catId] || 0) + amt
     })
     return map
   }, [transactions])
