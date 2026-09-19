@@ -38,7 +38,7 @@ export function TransactionsPage() {
       if (filters.search && !tx.note?.toLowerCase().includes(filters.search.toLowerCase())) return false
       if (filters.type && tx.type !== filters.type) return false
       if (filters.categoryId && tx.categoryId !== filters.categoryId) return false
-      if (filters.accountId && tx.accountId !== Number(filters.accountId)) return false
+      if (filters.accountId && tx.accountId !== filters.accountId) return false
       if (filters.month) {
         const d = new Date(tx.date)
         const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`

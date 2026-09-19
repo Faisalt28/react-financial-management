@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Modal, Button, Input, Select, Textarea } from '@/components/ui'
 import { useTransactionStore } from '../../store/transactionStore.js'
 import { useAccountStore } from '../../store/accountStore.js'
-import { CATEGORIES, TRANSACTION_TYPES } from '../../lib/constants.js'
+import { CATEGORIES, TRANSACTION_TYPES, formatCurrency } from '../../lib/constants.js'
 import { format } from 'date-fns'
 import { cn } from '../../lib/utils.js'
 
@@ -30,7 +30,11 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
       if (editData) {
         setForm({ ...defaultForm, ...editData, amount: String(editData.amount) })
       } else {
-        setForm(defaultForm)
+        setForm({
+          ...defaultForm,
+          accountId: accounts.length > 0 ? accounts[0].id : '',
+          date: format(new Date(), 'yyyy-MM-dd')
+        })
       }
       setError('')
     }
@@ -40,7 +44,7 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
     if (accounts.length > 0 && !form.accountId) {
       setForm(f => ({ ...f, accountId: accounts[0].id }))
     }
-  }, [accounts])
+  }, [accounts, form.accountId])
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }))
 
@@ -152,26 +156,34 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
         {/* Account */}
         <Select
           label="Dari Akun"
-          value={form.accountId}
-          onChange={e => set('accountId', Number(e.target.value))}
+          value={form.accountId || ''}
+          onChange={e => set('accountId', e.target.value)}
           id="tx-account"
         >
-          {accounts.map(acc => (
-            <option key={acc.id} value={acc.id}>{acc.icon} {acc.name}</option>
-          ))}
+          {accounts.length === 0 ? (
+            <option value="">Belum ada akun terdaftar</option>
+          ) : (
+            accounts.map(acc => (
+              <option key={acc.id} value={acc.id}>
+                {acc.icon} {acc.name} ({formatCurrency(acc.balance || 0)})
+              </option>
+            ))
+          )}
         </Select>
 
         {/* To Account (transfer) */}
         {form.type === 'transfer' && (
           <Select
             label="Ke Akun"
-            value={form.toAccountId}
-            onChange={e => set('toAccountId', Number(e.target.value))}
+            value={form.toAccountId || ''}
+            onChange={e => set('toAccountId', e.target.value)}
             id="tx-to-account"
           >
             <option value="">Pilih akun tujuan</option>
             {accounts.filter(a => a.id !== form.accountId).map(acc => (
-              <option key={acc.id} value={acc.id}>{acc.icon} {acc.name}</option>
+              <option key={acc.id} value={acc.id}>
+                {acc.icon} {acc.name} ({formatCurrency(acc.balance || 0)})
+              </option>
             ))}
           </Select>
         )}
