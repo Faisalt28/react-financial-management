@@ -384,7 +384,7 @@ export function SettingsPage() {
               variant="secondary"
               onClick={() => setShowResetConfirm(false)}
               disabled={loading}
-              className="flex-1 order-2 sm:order-1 border-2 border-zinc-950 dark:border-zinc-700 font-bold"
+              className="flex-1 order-2 sm:order-1 border-2 border-zinc-950 dark:border-zinc-700 font-bold cursor-pointer"
               id="cancel-reset-btn"
             >
               Batal
@@ -394,7 +394,7 @@ export function SettingsPage() {
               variant="destructive"
               onClick={handleReset}
               loading={loading}
-              className="flex-1 order-1 sm:order-2 bg-rose-600 hover:bg-rose-700 text-white font-bold border-2 border-zinc-950 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#000]"
+              className="flex-1 order-1 sm:order-2 bg-rose-600 hover:bg-rose-700 text-white font-bold border-2 border-zinc-950 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#000] cursor-pointer"
               id="confirm-reset-btn"
             >
               Ya, Reset Semua
@@ -404,16 +404,49 @@ export function SettingsPage() {
       </Modal>
 
       {/* =========================================================
-          POP UP KONFIRMASI LOGOUT
+          POP UP KONFIRMASI LOGOUT (DEAD CENTER ON PC & MOBILE)
           ========================================================= */}
-      <ConfirmModal
+      <Modal
         isOpen={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}
-        onConfirm={handleLogout}
         title="Keluar dari Akun"
-        message="Apakah Anda yakin ingin mengakhiri sesi masuk pada akun ini?"
-        confirmText="Ya, Keluar"
-      />
+        size="sm"
+        className="border-2 border-zinc-950 dark:border-zinc-800 shadow-[8px_8px_0px_0px_#f43f5e]"
+      >
+        <div className="flex flex-col items-center text-center py-2 space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-rose-100 dark:bg-rose-950/60 border-2 border-zinc-950 dark:border-zinc-700 text-rose-600 dark:text-rose-400 flex items-center justify-center shadow-[3px_3px_0px_0px_#f43f5e]">
+            <LogOut size={26} />
+          </div>
+          <div className="space-y-1.5">
+            <h3 className="text-base font-black text-zinc-900 dark:text-white uppercase tracking-tight">
+              Akhiri Sesi Masuk?
+            </h3>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">
+              Anda akan keluar dari sesi akun di perangkat ini. Anda dapat masuk kembali kapan saja.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2.5 w-full pt-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setShowLogoutConfirm(false)}
+              className="flex-1 order-2 sm:order-1 border-2 border-zinc-950 dark:border-zinc-700 font-bold cursor-pointer"
+              id="cancel-logout-btn"
+            >
+              Batal
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleLogout}
+              className="flex-1 order-1 sm:order-2 bg-rose-600 hover:bg-rose-700 text-white font-bold border-2 border-zinc-950 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#000] cursor-pointer"
+              id="confirm-logout-btn"
+            >
+              Ya, Keluar Akun
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
