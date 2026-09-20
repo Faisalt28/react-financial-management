@@ -88,7 +88,7 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
     <Modal isOpen={isOpen} onClose={onClose} title={editData ? 'Edit Transaksi' : 'Tambah Transaksi'} size="md">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Type tabs */}
-        <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)' }}>
+        <div className="flex gap-2 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border-2 border-zinc-950 dark:border-zinc-800">
           {TRANSACTION_TYPES.map(t => (
             <button
               key={t.id}
@@ -99,12 +99,11 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
                 if (t.id !== 'transfer') set('categoryId', t.id === 'expense' ? 'food' : 'salary')
               }}
               className={cn(
-                'flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-200',
+                'flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all duration-150',
                 form.type === t.id
-                  ? 'text-white shadow-lg'
-                  : 'text-slate-500 hover:text-slate-300'
+                  ? 'bg-purple-600 text-white border-2 border-zinc-950 shadow-[2px_2px_0px_0px_#000]'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white border-2 border-transparent'
               )}
-              style={form.type === t.id ? { background: t.color + '20', color: t.color, border: `1px solid ${t.color}30` } : {}}
             >
               {t.name}
             </button>
@@ -113,7 +112,7 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
 
         {/* Amount */}
         <Input
-          label="Jumlah"
+          label="Jumlah (Rp)"
           type="number"
           placeholder="0"
           value={form.amount}
@@ -126,8 +125,8 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
         {/* Category (not for transfer) */}
         {form.type !== 'transfer' && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-slate-400">Kategori</label>
-            <div className="grid grid-cols-4 gap-1.5 max-h-36 overflow-y-auto pr-1">
+            <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">Kategori</label>
+            <div className="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto pr-1">
               {filteredCategories.map(cat => (
                 <button
                   key={cat.id}
@@ -135,15 +134,11 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
                   id={`cat-${cat.id}`}
                   onClick={() => set('categoryId', cat.id)}
                   className={cn(
-                    'flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all duration-200',
+                    'flex flex-col items-center gap-1 p-2 rounded-xl text-xs font-bold transition-all duration-150',
                     form.categoryId === cat.id
-                      ? 'text-white'
-                      : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
+                      ? 'bg-purple-50 dark:bg-purple-950/50 border-2 border-purple-600 text-purple-700 dark:text-purple-300 shadow-[2px_2px_0px_0px_#9333ea]'
+                      : 'border-2 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                   )}
-                  style={form.categoryId === cat.id
-                    ? { background: cat.color + '20', border: `1px solid ${cat.color}40`, color: cat.color }
-                    : { border: '1px solid transparent' }
-                  }
                 >
                   <span className="text-lg">{cat.icon}</span>
                   <span className="leading-tight text-center line-clamp-1">{cat.name.split(' ')[0]}</span>
@@ -206,11 +201,11 @@ export function TransactionModal({ isOpen, onClose, editData = null }) {
           id="tx-note"
         />
 
-        {error && <p className="text-xs text-rose-400 bg-rose-500/10 px-3 py-2 rounded-lg">{error}</p>}
+        {error && <p className="text-xs text-rose-500 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 px-3 py-2 rounded-xl">{error}</p>}
 
         <div className="flex gap-3 pt-2">
           <Button type="button" variant="secondary" onClick={onClose} className="flex-1" id="tx-cancel">Batal</Button>
-          <Button type="submit" loading={loading} className="flex-1" id="tx-submit">
+          <Button type="submit" loading={loading} className="flex-1 bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]" id="tx-submit">
             {editData ? 'Simpan Perubahan' : 'Tambah Transaksi'}
           </Button>
         </div>

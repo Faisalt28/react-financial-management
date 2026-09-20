@@ -121,17 +121,17 @@ export function GoalsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white uppercase">
             Target & Tabungan
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 font-medium">
             Rencanakan dan kumpulkan dana impian dengan setoran langsung dari rekening & dompet Anda.
           </p>
         </div>
         <Button
           onClick={() => { setShowAddModal(true); setError('') }}
           id="add-goal-btn"
-          className="gap-1.5 bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 font-medium shadow-2xs"
+          className="gap-1.5 bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]"
         >
           <Plus size={16} />
           <span>Buat Target Baru</span>
@@ -140,32 +140,32 @@ export function GoalsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-2xs">
+        <div className="p-4 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Target Berjalan</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Target Berjalan</span>
             <span className="text-lg">🎯</span>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white mt-1">
-            {active.length} <span className="text-xs font-normal text-zinc-500">tujuan</span>
+          <p className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white mt-1">
+            {active.length} <span className="text-xs font-medium text-zinc-500">tujuan</span>
           </p>
         </div>
 
-        <div className="p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-2xs">
+        <div className="p-4 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Tercapai & Selesai</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Tercapai & Selesai</span>
             <span className="text-lg">✅</span>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 mt-1">
-            {completed.length} <span className="text-xs font-normal text-zinc-500">tujuan</span>
+          <p className="text-2xl font-black tracking-tight text-emerald-600 dark:text-emerald-400 mt-1">
+            {completed.length} <span className="text-xs font-medium text-zinc-500">tujuan</span>
           </p>
         </div>
 
-        <div className="p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-2xs">
+        <div className="p-4 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Total Dana Terkumpul</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Total Dana Terkumpul</span>
             <span className="text-lg">💰</span>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white mt-1">
+          <p className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white mt-1">
             {formatCurrency(totalCollected)}
           </p>
         </div>
@@ -194,18 +194,18 @@ export function GoalsPage() {
             return (
               <div
                 key={goal.id}
-                className="p-5 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-2xs hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200 flex flex-col justify-between relative"
+                className="p-5 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#9333ea] transition-all duration-200 flex flex-col justify-between relative"
               >
                 {/* Header Card */}
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 flex-shrink-0">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl bg-purple-50 dark:bg-purple-950/40 border-2 border-zinc-950 dark:border-zinc-800 shadow-[2px_2px_0px_0px_#9333ea] flex-shrink-0">
                         {goal.icon || goal.emoji || '🎯'}
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <h3 className="text-base font-bold text-zinc-900 dark:text-white truncate">
+                          <h3 className="text-base font-black text-zinc-900 dark:text-white uppercase truncate">
                             {goal.name}
                           </h3>
                           {isCompleted && (
@@ -215,12 +215,12 @@ export function GoalsPage() {
                           )}
                         </div>
                         {goal.description && (
-                          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-1">
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-1 font-medium">
                             {goal.description}
                           </p>
                         )}
                         {goal.deadline && (
-                          <div className="flex items-center gap-1.5 mt-1 text-[11px] text-zinc-400">
+                          <div className="flex items-center gap-1.5 mt-1 text-[11px] text-zinc-500 font-medium">
                             <Clock size={12} />
                             <span>Target: {formatDate(goal.deadline)}</span>
                           </div>
@@ -232,17 +232,17 @@ export function GoalsPage() {
                       onClick={() => setDeleteId(goal.id)}
                       id={`del-goal-${goal.id}`}
                       title="Hapus target"
-                      className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
+                      className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 hover:text-rose-500 hover:bg-rose-50 shadow-[1px_1px_0px_0px_#000] transition-colors"
                     >
-                      <Trash2 size={15} />
+                      <Trash2 size={14} />
                     </button>
                   </div>
 
                   {/* Progress Bar & Amounts */}
-                  <div className="space-y-2 my-4 bg-zinc-50 dark:bg-zinc-900/40 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800/60">
+                  <div className="space-y-2 my-4 bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 shadow-[2px_2px_0px_0px_#9333ea]">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400">Terkumpul</span>
-                      <span className="font-bold text-zinc-900 dark:text-white">
+                      <span className="text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider text-[10px]">Terkumpul</span>
+                      <span className="font-black text-zinc-900 dark:text-white">
                         {formatCurrency(goal.currentAmount || 0)}{' '}
                         <span className="text-zinc-400 font-normal">/ {formatCurrency(goal.targetAmount)}</span>
                       </span>
@@ -252,15 +252,15 @@ export function GoalsPage() {
                       current={goal.currentAmount || 0}
                       target={goal.targetAmount}
                       showLabel={false}
-                      color={isCompleted ? '#10b981' : '#18181b'}
+                      color={isCompleted ? '#10b981' : '#9333ea'}
                     />
 
                     <div className="flex justify-between items-center text-xs">
-                      <span className={cn('font-semibold', isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-900 dark:text-zinc-100')}>
+                      <span className={cn('font-bold', isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-purple-600 dark:text-purple-400')}>
                         {pct}% Tercapai
                       </span>
                       {!isCompleted && remaining > 0 && (
-                        <span className="text-zinc-400 text-[11px]">
+                        <span className="text-zinc-500 text-[11px] font-medium">
                           Kurang {formatCurrency(remaining)}
                         </span>
                       )}
@@ -274,13 +274,13 @@ export function GoalsPage() {
                     <Button
                       onClick={() => openDepositModal(goal)}
                       id={`contrib-${goal.id}`}
-                      className="flex-1 gap-2 bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 font-medium h-9 text-xs"
+                      className="flex-1 gap-2 bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold h-9 text-xs shadow-[2px_2px_0px_0px_#000]"
                     >
                       <Plus size={15} />
                       <span>Setor Dana dari Akun</span>
                     </Button>
                   ) : (
-                    <div className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-900/40">
+                    <div className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/40 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 shadow-[2px_2px_0px_0px_#10b981]">
                       <CheckCircle2 size={15} />
                       <span>Target Tabungan Berhasil Tercapai!</span>
                     </div>
@@ -515,7 +515,7 @@ export function GoalsPage() {
                   numDepositAmount <= 0 ||
                   numDepositAmount > selectedAccountBalance
                 }
-                className="flex-1 bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 font-medium"
+                className="flex-1 bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]"
                 id="deposit-submit"
               >
                 Konfirmasi Setoran
@@ -616,7 +616,7 @@ export function GoalsPage() {
             <Button
               type="submit"
               loading={loading}
-              className="flex-1 bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 font-medium"
+              className="flex-1 bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]"
               id="goal-submit"
             >
               Simpan Target

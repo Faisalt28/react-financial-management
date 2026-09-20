@@ -46,33 +46,27 @@ export function RegisterPage() {
       <button
         onClick={toggle}
         id="auth-theme-toggle"
-        className="absolute top-5 right-5 z-20 p-2.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors shadow-xs"
+        className="absolute top-5 right-5 z-20 p-2.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-purple-50 dark:hover:bg-purple-950 shadow-[2px_2px_0px_0px_#9333ea] transition-colors"
         aria-label="Toggle theme"
       >
         {isDark ? <Sun size={18} /> : <Moon size={18} />}
       </button>
 
-      {/* Subtle monochrome ambient light */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-neutral-200/50 dark:bg-zinc-900/60 blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-neutral-200/50 dark:bg-zinc-900/60 blur-3xl" />
-      </div>
-
       <div className="relative z-10 container mx-auto flex min-h-dvh items-center justify-center px-4 py-12">
-        <Card className="relative w-full max-w-md p-8 shadow-xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 rounded-2xl">
+        <div className="relative w-full max-w-md p-8 bg-white dark:bg-zinc-950 border-2 border-zinc-950 dark:border-zinc-800 rounded-2xl shadow-[8px_8px_0px_0px_#9333ea]">
           {/* Header */}
           <div className="mb-8 flex flex-col items-center">
-            <div className="my-2 flex justify-center">
+            <div className="my-2 flex justify-center p-2 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50 dark:bg-purple-950/40 shadow-[3px_3px_0px_0px_#9333ea]">
               <img
                 src={logo}
                 alt="AcheeZ Logo"
-                className="w-20 h-20 object-contain drop-shadow-md"
+                className="w-16 h-16 object-contain"
               />
             </div>
-            <h1 className="mt-2 mb-1 text-center text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
+            <h1 className="mt-3 mb-1 text-center text-2xl font-black uppercase tracking-tight text-zinc-900 dark:text-white">
               Buat Akun Baru
             </h1>
-            <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-center text-sm text-zinc-500 dark:text-zinc-400 font-medium">
               Mulai atur keuangan cerdas bersama AcheeZ
             </p>
           </div>
@@ -84,13 +78,11 @@ export function RegisterPage() {
               <Input
                 type="text"
                 placeholder="Nama Lengkap"
-                className="bg-zinc-50/50 dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800 ps-10 h-11 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100"
                 value={form.name}
                 onChange={e => set('name', e.target.value)}
                 id="reg-name"
                 required
               />
-              <User className="text-zinc-400 dark:text-zinc-500 absolute start-3 top-1/2 size-4 -translate-y-1/2 pointer-events-none" />
             </div>
 
             {/* Email */}
@@ -98,14 +90,12 @@ export function RegisterPage() {
               <Input
                 type="email"
                 placeholder="email@contoh.com"
-                className="bg-zinc-50/50 dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800 ps-10 h-11 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100"
                 autoComplete="email"
                 value={form.email}
                 onChange={e => set('email', e.target.value)}
                 id="reg-email"
                 required
               />
-              <Mail className="text-zinc-400 dark:text-zinc-500 absolute start-3 top-1/2 size-4 -translate-y-1/2 pointer-events-none" />
             </div>
 
             {/* Password */}
@@ -113,14 +103,12 @@ export function RegisterPage() {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Kata sandi (min. 6 karakter)"
-                className="bg-zinc-50/50 dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800 ps-10 pe-10 h-11 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100"
                 autoComplete="new-password"
                 value={form.password}
                 onChange={e => set('password', e.target.value)}
                 id="reg-password"
                 required
               />
-              <Lock className="text-zinc-400 dark:text-zinc-500 absolute start-3 top-1/2 size-4 -translate-y-1/2 pointer-events-none" />
               <Button
                 type="button"
                 variant="ghost"
@@ -138,14 +126,12 @@ export function RegisterPage() {
               <Input
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="Ulangi kata sandi"
-                className="bg-zinc-50/50 dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800 ps-10 pe-10 h-11 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100"
                 autoComplete="new-password"
                 value={form.confirm}
                 onChange={e => set('confirm', e.target.value)}
                 id="reg-confirm"
                 required
               />
-              <Lock className="text-zinc-400 dark:text-zinc-500 absolute start-3 top-1/2 size-4 -translate-y-1/2 pointer-events-none" />
               <Button
                 type="button"
                 variant="ghost"
@@ -160,15 +146,15 @@ export function RegisterPage() {
 
             {/* Error message */}
             {error && (
-              <p className="text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 px-3 py-2.5 rounded-lg">
+              <p className="text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-200 dark:border-rose-900/50 px-3 py-2.5 rounded-xl font-medium">
                 {error}
               </p>
             )}
 
-            {/* Submit button: Black in light mode, White in dark mode */}
+            {/* Submit button */}
             <Button
               type="submit"
-              className="h-11 w-full cursor-pointer bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 font-medium transition-all shadow-xs mt-1"
+              className="h-11 w-full cursor-pointer bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-black uppercase tracking-wider transition-all shadow-[4px_4px_0px_0px_#000] dark:shadow-[4px_4px_0px_0px_#fff] mt-1"
               disabled={loading}
               id="reg-submit"
             >
@@ -182,13 +168,13 @@ export function RegisterPage() {
           </form>
 
           {/* Login link */}
-          <p className="mt-8 flex justify-center gap-1.5 text-center text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-8 flex justify-center gap-1.5 text-center text-sm text-zinc-500 dark:text-zinc-400 font-medium">
             <span>Sudah punya akun?</span>
-            <Link to="/login" className="text-zinc-900 dark:text-white font-semibold underline underline-offset-4 hover:opacity-80" id="go-login">
+            <Link to="/login" className="text-purple-600 dark:text-purple-400 font-bold underline underline-offset-4 hover:opacity-80" id="go-login">
               Masuk di sini
             </Link>
           </p>
-        </Card>
+        </div>
       </div>
     </section>
   )

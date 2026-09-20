@@ -122,9 +122,9 @@ export function SettingsPage() {
         <CardHeader><CardTitle>Profil Pengguna</CardTitle></CardHeader>
 
         {/* Avatar Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6 p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6 p-4 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 shadow-[4px_4px_0px_0px_#9333ea]">
           <div className="relative group self-start sm:self-center">
-            <div className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center text-3xl font-bold flex-shrink-0 bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100 shadow-sm border border-zinc-200 dark:border-zinc-700">
+            <div className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center text-3xl font-black flex-shrink-0 bg-purple-600 text-white dark:bg-purple-600 dark:text-white shadow-sm border-2 border-zinc-950 dark:border-zinc-700">
               {user?.avatar ? (
                 <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
               ) : (
@@ -137,7 +137,7 @@ export function SettingsPage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               title="Ganti Foto Profil"
-              className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-black text-white dark:bg-white dark:text-black shadow-md hover:scale-105 transition-all border-2 border-white dark:border-zinc-950"
+              className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-purple-600 text-white shadow-md hover:scale-105 transition-all border-2 border-zinc-950"
             >
               <Camera size={14} />
             </button>
@@ -145,12 +145,12 @@ export function SettingsPage() {
 
           <div className="flex-1 min-w-0 space-y-1">
             <div className="flex items-center gap-2">
-              <p className="font-bold text-base text-zinc-900 dark:text-white truncate">{user?.name}</p>
-              <Badge variant="outline" className="border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30 text-[10px]">
+              <p className="font-black text-base text-zinc-900 dark:text-white uppercase truncate">{user?.name}</p>
+              <Badge variant="success" className="text-[10px]">
                 Akun Aktif
               </Badge>
             </div>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user?.email}</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium truncate">{user?.email}</p>
 
             {/* Photo Action Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-2">
@@ -167,7 +167,7 @@ export function SettingsPage() {
                 size="sm"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={photoLoading}
-                className="h-8 text-xs gap-1.5"
+                className="h-8 text-xs gap-1.5 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]"
               >
                 <Upload size={13} />
                 <span>{photoLoading ? 'Memproses...' : 'Upload Foto'}</span>
@@ -178,7 +178,7 @@ export function SettingsPage() {
                   type="button"
                   onClick={handleRemovePhoto}
                   disabled={photoLoading}
-                  className="h-8 px-2.5 rounded-md text-xs text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors flex items-center gap-1"
+                  className="h-8 px-2.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-700 text-xs font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 shadow-[1px_1px_0px_0px_#000] transition-colors flex items-center gap-1"
                 >
                   <Trash2 size={13} />
                   <span>Hapus Foto</span>
@@ -186,7 +186,7 @@ export function SettingsPage() {
               )}
 
               {photoSaved && (
-                <span className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
                   <Check size={14} /> Foto disimpan!
                 </span>
               )}
@@ -209,7 +209,7 @@ export function SettingsPage() {
             id="settings-email"
             disabled
           />
-          <Button type="submit" id="save-profile-btn" className="flex items-center gap-2">
+          <Button type="submit" id="save-profile-btn" className="flex items-center gap-2 bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]">
             <Save size={15} />
             {profileSaved ? '✅ Tersimpan!' : 'Simpan Profil'}
           </Button>
@@ -221,7 +221,7 @@ export function SettingsPage() {
         <CardHeader><CardTitle>Ubah Password</CardTitle></CardHeader>
         <form onSubmit={savePassword} className="space-y-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Password Saat Ini</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">Password Saat Ini</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 pointer-events-none"><Lock size={15} /></span>
               <Input
@@ -247,8 +247,8 @@ export function SettingsPage() {
           <Input label="Konfirmasi Password Baru" type="password" value={passForm.confirm}
             onChange={e => setPassForm(f => ({ ...f, confirm: e.target.value }))}
             icon={<Lock size={15} />} id="confirm-pass" placeholder="Ulangi password baru" />
-          {passError && <p className="text-xs text-rose-400 bg-rose-500/10 px-3 py-2 rounded-lg">{passError}</p>}
-          <Button type="submit" id="save-pass-btn">
+          {passError && <p className="text-xs text-rose-500 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 px-3 py-2 rounded-xl">{passError}</p>}
+          <Button type="submit" id="save-pass-btn" className="bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]">
             {passSaved ? '✅ Password diubah!' : 'Ubah Password'}
           </Button>
         </form>

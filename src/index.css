@@ -152,30 +152,29 @@ body {
   background: var(--color-brand-600);
 }
 
-/* Card utility supporting clean light & dark monochromatic styles */
+/* 2D Manga Card styling with solid purple accent */
 .glass-card {
   background: #ffffff;
-  border: 1px solid #e4e4e7;
+  border: 2px solid #09090b;
   border-radius: 1rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  box-shadow: 4px 4px 0px 0px #9333ea;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .glass-card {
   background: #09090b;
-  border: 1px solid #27272a;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
+  border: 2px solid #27272a;
+  box-shadow: 4px 4px 0px 0px #9333ea;
 }
 
 .glass-card-hover:hover {
-  border-color: #d4d4d8;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px 0px #9333ea;
 }
 
 .dark .glass-card-hover:hover {
-  border-color: #3f3f46;
-  box-shadow: 0 6px 20px -4px rgba(255, 255, 255, 0.05);
+  border-color: #f4f4f5;
+  box-shadow: 6px 6px 0px 0px #9333ea;
 }
 
 /* Income/Expense badges */

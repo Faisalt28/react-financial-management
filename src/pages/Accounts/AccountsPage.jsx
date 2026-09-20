@@ -66,19 +66,19 @@ export function AccountsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Total balance card */}
-      <div className="p-6 text-center rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-xs">
-        <p className="text-xs font-medium uppercase tracking-wider text-zinc-400 mb-1">Total Saldo Semua Akun</p>
-        <p className="text-3xl sm:text-4xl font-extrabold text-zinc-900 dark:text-white tracking-tight">{formatCurrency(totalBalance)}</p>
-        <p className="text-xs text-zinc-500 mt-1">{accounts.length} akun & dompet terdaftar</p>
+      <div className="p-6 text-center rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea]">
+        <p className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1">Total Saldo Semua Akun</p>
+        <p className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">{formatCurrency(totalBalance)}</p>
+        <p className="text-xs text-zinc-500 font-medium mt-1">{accounts.length} akun & dompet terdaftar</p>
       </div>
 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-zinc-900 dark:text-white">Daftar Akun & Dompet</h2>
-          <p className="text-xs text-zinc-500">Kelola dompet tunai, rekening tabungan, dan dompet digital Anda</p>
+          <h2 className="text-lg font-black text-zinc-900 dark:text-white uppercase tracking-tight">Daftar Akun & Dompet</h2>
+          <p className="text-xs text-zinc-500 font-medium">Kelola dompet tunai, rekening tabungan, dan dompet digital Anda</p>
         </div>
-        <Button size="sm" onClick={openAdd} id="add-account-btn" className="bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black font-medium gap-1.5 shadow-2xs">
+        <Button size="sm" onClick={openAdd} id="add-account-btn" className="bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold gap-1.5 shadow-[2px_2px_0px_0px_#000]">
           <Plus size={16} /> Tambah Akun
         </Button>
       </div>
@@ -86,43 +86,43 @@ export function AccountsPage() {
       {/* Account cards */}
       {accounts.length === 0 ? (
         <EmptyState icon="🏦" title="Belum ada akun" description="Tambahkan akun bank, dompet, atau e-wallet Anda"
-          action={<Button onClick={openAdd} id="empty-add-acc" className="bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black">Tambah Akun</Button>} />
+          action={<Button onClick={openAdd} id="empty-add-acc">Tambah Akun</Button>} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {accounts.map(acc => (
             <div
               key={acc.id}
-              className={`p-5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
+              className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
                 selectedAccount?.id === acc.id
-                  ? 'border-zinc-900 dark:border-white shadow-md bg-zinc-50/80 dark:bg-zinc-900/80'
-                  : 'border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs'
+                  ? 'border-zinc-950 dark:border-zinc-100 shadow-[6px_6px_0px_0px_#9333ea] bg-purple-50/40 dark:bg-purple-950/20'
+                  : 'border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#9333ea]'
               }`}
               onClick={() => setSelectedAccount(s => s?.id === acc.id ? null : acc)}
               id={`account-card-${acc.id}`}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800">
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl bg-purple-50 dark:bg-purple-950/40 border-2 border-zinc-950 dark:border-zinc-800 shadow-[2px_2px_0px_0px_#9333ea]">
                     {acc.icon}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-zinc-900 dark:text-white">{acc.name}</p>
-                    <p className="text-xs text-zinc-500">{ACCOUNT_TYPES.find(t => t.id === acc.type)?.name || 'Dompet'}</p>
+                    <p className="text-sm font-black text-zinc-900 dark:text-white uppercase">{acc.name}</p>
+                    <p className="text-xs text-zinc-500 font-medium">{ACCOUNT_TYPES.find(t => t.id === acc.type)?.name || 'Dompet'}</p>
                   </div>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-1.5">
                   <button onClick={e => { e.stopPropagation(); openEdit(acc) }} id={`edit-acc-${acc.id}`}
-                    className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
+                    className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-purple-600 hover:bg-purple-50 shadow-[1px_1px_0px_0px_#000] transition-colors">
                     <Edit2 size={13} />
                   </button>
                   <button onClick={e => { e.stopPropagation(); setDeleteId(acc.id) }} id={`del-acc-${acc.id}`}
-                    className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors">
+                    className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-rose-500 hover:bg-rose-50 shadow-[1px_1px_0px_0px_#000] transition-colors">
                     <Trash2 size={13} />
                   </button>
                 </div>
               </div>
-              <p className="text-2xl font-extrabold text-zinc-900 dark:text-white">{formatCompact(acc.balance || 0)}</p>
-              <p className="text-xs text-zinc-500 mt-0.5">{formatCurrency(acc.balance || 0)}</p>
+              <p className="text-2xl font-black text-zinc-900 dark:text-white">{formatCompact(acc.balance || 0)}</p>
+              <p className="text-xs text-zinc-500 font-medium mt-0.5">{formatCurrency(acc.balance || 0)}</p>
             </div>
           ))}
         </div>
@@ -130,21 +130,21 @@ export function AccountsPage() {
 
       {/* Account transactions */}
       {selectedAccount && (
-        <div className="glass-card p-5">
-          <h3 className="text-sm font-semibold text-slate-300 mb-4">
+        <div className="rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5 shadow-[4px_4px_0px_0px_#9333ea]">
+          <h3 className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-tight mb-4">
             Transaksi Terakhir — {selectedAccount.icon} {selectedAccount.name}
           </h3>
           {accountTx.length === 0 ? (
-            <p className="text-sm text-slate-600 text-center py-6">Belum ada transaksi</p>
+            <p className="text-sm text-zinc-500 text-center py-6 font-medium">Belum ada transaksi</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 divide-y-2 divide-zinc-100 dark:divide-zinc-900">
               {accountTx.map(tx => (
-                <div key={tx.id} className="flex items-center justify-between py-2 border-b border-white/5">
+                <div key={tx.id} className="flex items-center justify-between py-2.5">
                   <div>
-                    <p className="text-sm text-slate-300">{tx.note || tx.type}</p>
-                    <p className="text-xs text-slate-600">{formatDate(tx.date)}</p>
+                    <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{tx.note || tx.type}</p>
+                    <p className="text-xs text-zinc-500 font-medium">{formatDate(tx.date)}</p>
                   </div>
-                  <span className={`font-semibold text-sm ${tx.type === 'income' ? 'text-emerald-400' : tx.type === 'expense' ? 'text-rose-400' : 'text-brand-400'}`}>
+                  <span className={`font-black text-sm ${tx.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : tx.type === 'expense' ? 'text-rose-600 dark:text-rose-400' : 'text-purple-600'}`}>
                     {tx.type === 'income' ? '+' : tx.type === 'expense' ? '-' : '↔'}{formatCompact(tx.amount)}
                   </span>
                 </div>

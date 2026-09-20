@@ -72,44 +72,44 @@ export function BudgetPage() {
   return (
     <div className="space-y-5 animate-fade-in">
       {/* Month navigator */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-3 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea]">
         <button onClick={() => setCurrentDate(d => subMonths(d, 1))} id="prev-month"
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
-          <ChevronLeft size={20} />
+          className="p-2 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-purple-50 dark:hover:bg-purple-950 shadow-[2px_2px_0px_0px_#000] transition-colors">
+          <ChevronLeft size={18} />
         </button>
         <div className="text-center">
-          <p className="text-lg font-bold text-white">{format(currentDate, 'MMMM yyyy', { locale: idLocale })}</p>
-          <p className="text-xs text-slate-500">
+          <p className="text-lg font-black text-zinc-900 dark:text-white uppercase tracking-tight">{format(currentDate, 'MMMM yyyy', { locale: idLocale })}</p>
+          <p className="text-xs text-zinc-500 font-medium">
             Anggaran: {formatCurrency(totalBudget)} · Terpakai: {formatCurrency(totalSpent)}
           </p>
         </div>
         <button onClick={() => setCurrentDate(d => addMonths(d, 1))} id="next-month"
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
-          <ChevronRight size={20} />
+          className="p-2 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-purple-50 dark:hover:bg-purple-950 shadow-[2px_2px_0px_0px_#000] transition-colors">
+          <ChevronRight size={18} />
         </button>
       </div>
 
       {/* Overall progress */}
       {totalBudget > 0 && (
-        <div className="glass-card p-5">
+        <div className="p-5 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea]">
           <div className="flex justify-between items-center mb-3">
-            <p className="text-sm font-semibold text-white">Total Anggaran</p>
-            <p className="text-sm text-slate-400">
-              {formatCompact(totalSpent)} <span className="text-slate-600">/ {formatCompact(totalBudget)}</span>
+            <p className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-tight">Total Anggaran Bulanan</p>
+            <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300">
+              {formatCompact(totalSpent)} <span className="text-zinc-400 font-normal">/ {formatCompact(totalBudget)}</span>
             </p>
           </div>
           <ProgressBar current={totalSpent} target={totalBudget} showLabel />
-          <div className="flex gap-4 mt-3 text-xs text-slate-500">
-            <span className="text-emerald-400">Sisa: {formatCurrency(Math.max(0, totalBudget - totalSpent))}</span>
-            {totalSpent > totalBudget && <span className="text-rose-400">Lebih: {formatCurrency(totalSpent - totalBudget)}</span>}
+          <div className="flex gap-4 mt-3 text-xs font-semibold">
+            <span className="text-emerald-600 dark:text-emerald-400">Sisa: {formatCurrency(Math.max(0, totalBudget - totalSpent))}</span>
+            {totalSpent > totalBudget && <span className="text-rose-600 dark:text-rose-400">Lebih: {formatCurrency(totalSpent - totalBudget)}</span>}
           </div>
         </div>
       )}
 
       {/* Header + add button */}
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-slate-300">{budgets.length} Kategori Anggaran</h2>
-        <Button size="sm" onClick={() => { setEditData(null); setError(''); setShowModal(true) }} id="add-budget-btn">
+        <h2 className="text-base font-black text-zinc-900 dark:text-white uppercase tracking-tight">{budgets.length} Kategori Anggaran</h2>
+        <Button size="sm" onClick={() => { setEditData(null); setError(''); setShowModal(true) }} id="add-budget-btn" className="bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold gap-1.5 shadow-[2px_2px_0px_0px_#000]">
           <Plus size={16} /> Tambah Anggaran
         </Button>
       </div>
@@ -121,36 +121,37 @@ export function BudgetPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {budgetItems.map(b => (
-            <div key={b.id} className="glass-card p-5 glass-card-hover">
+            <div key={b.id} className="p-5 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#9333ea] transition-all">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                    style={{ background: b.cat.color + '20', border: `1px solid ${b.cat.color}30` }}>
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50 dark:bg-purple-950/40 shadow-[2px_2px_0px_0px_#9333ea]">
                     {b.cat.icon}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">{b.cat.name}</p>
-                    <Badge variant={b.pct >= 100 ? 'danger' : b.pct >= 90 ? 'warning' : 'success'}>
-                      {b.status.label}
-                    </Badge>
+                    <p className="text-sm font-black text-zinc-900 dark:text-white uppercase">{b.cat.name}</p>
+                    <div className="mt-1">
+                      <Badge variant={b.pct >= 100 ? 'danger' : b.pct >= 90 ? 'warning' : 'success'}>
+                        {b.status.label}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
                 <button onClick={() => setDeleteId(b.id)} id={`del-budget-${b.id}`}
-                  className="p-1.5 rounded-lg text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 transition-colors">
+                  className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 hover:text-rose-500 hover:bg-rose-50 shadow-[1px_1px_0px_0px_#000] transition-colors">
                   <Trash2 size={13} />
                 </button>
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-500">Terpakai</span>
-                  <span className="text-slate-300">
+                <div className="flex justify-between text-xs font-bold text-zinc-600 dark:text-zinc-400">
+                  <span>Terpakai</span>
+                  <span className="text-zinc-900 dark:text-zinc-100">
                     {formatCompact(b.spent)} / {formatCompact(b.amount)}
-                    <span className="text-slate-600 ml-1">({b.pct}%)</span>
+                    <span className="text-purple-600 dark:text-purple-400 ml-1">({b.pct}%)</span>
                   </span>
                 </div>
                 <ProgressBar current={b.spent} target={b.amount} showLabel={false} color={b.status.color} />
-                <p className="text-xs text-slate-600">
+                <p className="text-xs font-bold text-zinc-500">
                   Sisa: <span style={{ color: b.status.color }}>{formatCurrency(Math.max(0, b.amount - b.spent))}</span>
                 </p>
               </div>

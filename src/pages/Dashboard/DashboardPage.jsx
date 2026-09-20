@@ -74,6 +74,9 @@ export function DashboardPage() {
         {/* =========================================================
             BENTO 1: TOTAL SALDO & AKUN BANK (SPAN 2 COL)
             ========================================================= */}
+        {/* =========================================================
+            BENTO 1: TOTAL SALDO & AKUN BANK (SPAN 2 COL)
+            ========================================================= */}
         <BentoCard
           name="Total Kekayaan & Saldo"
           className="lg:col-span-2"
@@ -81,16 +84,13 @@ export function DashboardPage() {
           Icon={Wallet}
           href="/accounts"
           cta="Kelola Akun & Rekening"
-          background={
-            <div className="absolute right-0 top-0 -mt-8 -mr-8 w-72 h-72 rounded-full bg-gradient-to-br from-zinc-200/40 via-zinc-100/20 to-transparent dark:from-zinc-800/40 dark:via-zinc-900/10 blur-3xl pointer-events-none" />
-          }
         >
           <div className="space-y-4">
             <div>
-              <span className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Total Saldo Tersedia
               </span>
-              <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white mt-1">
+              <div className="text-3xl sm:text-4xl font-black tracking-tight text-zinc-900 dark:text-white mt-1">
                 {formatCurrency(totalBalance)}
               </div>
             </div>
@@ -100,13 +100,13 @@ export function DashboardPage() {
               {accounts.slice(0, 3).map((acc) => (
                 <div
                   key={acc.id}
-                  className="p-3 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/60 flex flex-col justify-between shadow-2xs"
+                  className="p-3 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col justify-between shadow-[2px_2px_0px_0px_#9333ea] hover:translate-y-[-1px] transition-all"
                 >
-                  <div className="flex items-center justify-between text-xs text-zinc-500 mb-1.5">
-                    <span className="font-medium truncate">{acc.name}</span>
+                  <div className="flex items-center justify-between text-xs text-zinc-500 mb-1.5 font-medium">
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200 truncate">{acc.name}</span>
                     <span>{acc.icon || '💳'}</span>
                   </div>
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                  <span className="text-sm font-black text-zinc-900 dark:text-zinc-100">
                     {formatCurrency(acc.balance || 0)}
                   </span>
                 </div>
@@ -128,41 +128,38 @@ export function DashboardPage() {
           Icon={ArrowRightLeft}
           href="/transactions"
           cta="Riwayat Arus Kas"
-          background={
-            <div className="absolute right-0 bottom-0 w-48 h-48 rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 blur-2xl pointer-events-none" />
-          }
         >
           <div className="space-y-2.5">
             {/* Pemasukan */}
-            <div className="flex items-center justify-between p-3 rounded-xl border border-emerald-500/15 bg-emerald-500/5">
+            <div className="flex items-center justify-between p-3 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-emerald-50 dark:bg-emerald-950/40 shadow-[2px_2px_0px_0px_#10b981]">
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                <div className="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 font-bold">
                   <ArrowDownRight size={16} />
                 </div>
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Pemasukan</span>
+                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Pemasukan</span>
               </div>
-              <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="text-sm font-black text-emerald-700 dark:text-emerald-400">
                 +{formatCurrency(thisMonth.income)}
               </span>
             </div>
 
             {/* Pengeluaran */}
-            <div className="flex items-center justify-between p-3 rounded-xl border border-rose-500/15 bg-rose-500/5">
+            <div className="flex items-center justify-between p-3 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-rose-50 dark:bg-rose-950/40 shadow-[2px_2px_0px_0px_#f43f5e]">
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-rose-500/20 text-rose-600 dark:text-rose-400">
+                <div className="p-1.5 rounded-lg bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 font-bold">
                   <ArrowUpRight size={16} />
                 </div>
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Pengeluaran</span>
+                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Pengeluaran</span>
               </div>
-              <span className="text-sm font-bold text-rose-600 dark:text-rose-400">
+              <span className="text-sm font-black text-rose-700 dark:text-rose-400">
                 -{formatCurrency(thisMonth.expense)}
               </span>
             </div>
 
             {/* Sisa Bersih */}
-            <div className="pt-1.5 px-1 flex items-center justify-between text-xs text-zinc-500">
-              <span className="font-medium">Sisa Bersih:</span>
-              <span className={`font-bold text-sm ${thisMonth.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+            <div className="pt-1.5 px-1 flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400">
+              <span className="font-bold uppercase tracking-wider text-[11px]">Sisa Bersih:</span>
+              <span className={`font-black text-sm ${thisMonth.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                 {thisMonth.net >= 0 ? '+' : ''}{formatCurrency(thisMonth.net)}
               </span>
             </div>
@@ -179,9 +176,6 @@ export function DashboardPage() {
           Icon={TrendingUp}
           href="/budget"
           cta="Atur Batas Anggaran"
-          background={
-            <div className="absolute left-0 top-0 w-48 h-48 rounded-full bg-zinc-400/5 dark:bg-zinc-800/10 blur-2xl pointer-events-none" />
-          }
         >
           <div className="space-y-3">
             {budgets.slice(0, 2).map(b => {
@@ -191,22 +185,22 @@ export function DashboardPage() {
               const cat = getCategoryById(b.categoryId)
 
               return (
-                <div key={b.id} className="space-y-1.5">
+                <div key={b.id} className="space-y-1.5 p-2.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 shadow-[2px_2px_0px_0px_#9333ea]">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-medium text-zinc-700 dark:text-zinc-300 truncate">
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200 truncate">
                       {cat.icon} {cat.name}
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded font-medium" style={{ color: status.color, background: `${status.color}15` }}>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded font-black border border-zinc-950 dark:border-zinc-700" style={{ color: status.color, background: `${status.color}20` }}>
                       {pct}%
                     </span>
                   </div>
-                  <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full border border-zinc-950 dark:border-zinc-800 overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
-                      style={{ width: `${pct}%`, backgroundColor: status.color }}
+                      style={{ width: `${Math.min(pct, 100)}%`, backgroundColor: status.color }}
                     />
                   </div>
-                  <div className="flex justify-between text-[11px] text-zinc-400">
+                  <div className="flex justify-between text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
                     <span>{formatCurrency(spent)}</span>
                     <span>Max {formatCurrency(b.amount)}</span>
                   </div>
@@ -232,23 +226,20 @@ export function DashboardPage() {
           Icon={Target}
           href="/goals"
           cta="Target Tabungan"
-          background={
-            <div className="absolute right-0 top-0 w-48 h-48 rounded-full bg-blue-500/5 dark:bg-blue-500/10 blur-2xl pointer-events-none" />
-          }
         >
           <div className="space-y-3">
             {goals.slice(0, 2).map(g => {
               const pct = calcProgress(g.currentAmount, g.targetAmount)
               return (
-                <div key={g.id} className="p-2.5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 space-y-1.5 shadow-2xs">
+                <div key={g.id} className="p-2.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 space-y-1.5 shadow-[2px_2px_0px_0px_#9333ea]">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate">{g.name}</span>
-                    <span className="font-bold text-zinc-900 dark:text-white">{pct}%</span>
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200 truncate">{g.name}</span>
+                    <span className="font-black text-purple-600 dark:text-purple-400">{pct}%</span>
                   </div>
-                  <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2 rounded-full overflow-hidden">
-                    <div className="h-full bg-zinc-900 dark:bg-white rounded-full" style={{ width: `${pct}%` }} />
+                  <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full border border-zinc-950 dark:border-zinc-800 overflow-hidden">
+                    <div className="h-full bg-purple-600 rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
                   </div>
-                  <div className="flex justify-between text-[11px] text-zinc-500">
+                  <div className="flex justify-between text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
                     <span>{formatCompact(g.currentAmount)}</span>
                     <span>Target {formatCompact(g.targetAmount)}</span>
                   </div>
@@ -274,22 +265,19 @@ export function DashboardPage() {
           Icon={BarChart3}
           href="/reports"
           cta="Buka Laporan Lengkap"
-          background={
-            <div className="absolute right-0 bottom-0 w-48 h-48 rounded-full bg-purple-500/5 dark:bg-purple-500/10 blur-2xl pointer-events-none" />
-          }
         >
           <div className="space-y-3">
-            <div className="p-3 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 flex items-center justify-between shadow-2xs">
+            <div className="p-3 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 flex items-center justify-between shadow-[2px_2px_0px_0px_#9333ea]">
               <div>
-                <p className="text-xs text-zinc-400 font-medium">Transaksi Terhitung</p>
-                <p className="text-lg font-bold text-zinc-900 dark:text-white">{transactions.length} Aktivitas</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider">Transaksi Terhitung</p>
+                <p className="text-lg font-black text-zinc-900 dark:text-white">{transactions.length} Aktivitas</p>
               </div>
-              <div className="p-2 rounded-lg bg-zinc-200/60 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+              <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-950/50 border border-zinc-950 dark:border-zinc-800 text-purple-700 dark:text-purple-300 font-bold">
                 <FileText size={18} />
               </div>
             </div>
 
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
               Analisis laporan bulanan lengkap dengan neraca mutasi transaksi terperinci.
             </p>
           </div>
@@ -305,11 +293,8 @@ export function DashboardPage() {
           Icon={ArrowRightLeft}
           href="/transactions"
           cta="Lihat Semua Riwayat Transaksi"
-          background={
-            <div className="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-zinc-300/20 dark:bg-zinc-800/20 blur-3xl pointer-events-none" />
-          }
         >
-          <div className="divide-y divide-zinc-100 dark:divide-zinc-800/80">
+          <div className="divide-y-2 divide-zinc-100 dark:divide-zinc-900">
             {recentTransactions.map((tx) => {
               const cat = getCategoryById(tx.categoryId)
               const isIncome = tx.type === 'income'
@@ -318,21 +303,21 @@ export function DashboardPage() {
               return (
                 <div key={tx.id} className="py-3 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 flex-shrink-0">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base bg-purple-50 dark:bg-purple-950/40 border-2 border-zinc-950 dark:border-zinc-800 shadow-[2px_2px_0px_0px_#9333ea] flex-shrink-0">
                       {cat.icon}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
+                      <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
                         {tx.note || cat.name}
                       </p>
-                      <p className="text-xs text-zinc-400 mt-0.5">
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium">
                         {formatDate(tx.date)} &bull; {cat.name}
                       </p>
                     </div>
                   </div>
 
                   <div className="text-right flex-shrink-0">
-                    <p className={`text-sm sm:text-base font-bold ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-blue-500'}`}>
+                    <p className={`text-sm sm:text-base font-black ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-purple-600'}`}>
                       {isIncome ? '+' : isExpense ? '-' : ''}{formatCurrency(tx.amount)}
                     </p>
                   </div>

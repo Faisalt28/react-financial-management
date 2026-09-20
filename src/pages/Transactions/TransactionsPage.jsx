@@ -88,13 +88,13 @@ export function TransactionsPage() {
         ].map(s => (
           <div
             key={s.label}
-            className="p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-center shadow-xs"
+            className="p-4 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-center shadow-[4px_4px_0px_0px_#9333ea]"
           >
-            <p className="text-xs text-zinc-500 mb-1 font-medium">{s.label}</p>
-            <p className="text-xl font-bold" style={{ color: s.color }}>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1 font-bold uppercase tracking-wider">{s.label}</p>
+            <p className="text-2xl font-black tracking-tight" style={{ color: s.color }}>
               {s.prefix}{formatCompact(Math.abs(s.value))}
             </p>
-            <p className="text-xs text-zinc-400 mt-0.5 font-medium">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 font-semibold">
               {s.prefix}{formatCurrency(Math.abs(s.value))}
             </p>
           </div>
@@ -102,7 +102,7 @@ export function TransactionsPage() {
       </div>
 
       {/* Filters */}
-      <div className="p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-xs space-y-3">
+      <div className="p-4 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea] space-y-3">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
           <div className="flex-1">
             <Input
@@ -116,7 +116,7 @@ export function TransactionsPage() {
           <Button
             onClick={() => { setEditData(null); setShowModal(true) }}
             id="add-tx-btn"
-            className="flex-shrink-0"
+            className="flex-shrink-0 bg-purple-600 text-white hover:bg-purple-700 border-2 border-zinc-950 dark:border-zinc-700 font-bold shadow-[2px_2px_0px_0px_#000]"
           >
             <Plus size={16} /> Tambah Transaksi
           </Button>
@@ -147,7 +147,7 @@ export function TransactionsPage() {
       </div>
 
       {/* Transaction List / Table */}
-      <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden shadow-xs">
+      <div className="rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden shadow-[4px_4px_0px_0px_#9333ea]">
         {loading ? (
           <div className="flex justify-center py-16"><Spinner /></div>
         ) : paginated.length === 0 ? (
@@ -180,17 +180,16 @@ export function TransactionsPage() {
                 return (
                   <div
                     key={tx.id}
-                    className="grid grid-cols-12 gap-2 px-5 py-4 border-b border-zinc-100 dark:border-zinc-900 hover:bg-zinc-50/60 dark:hover:bg-zinc-900/40 transition-colors items-center"
+                    className="grid grid-cols-12 gap-2 px-5 py-4 border-b-2 border-zinc-100 dark:border-zinc-900 hover:bg-zinc-50/60 dark:hover:bg-zinc-900/40 transition-colors items-center"
                   >
                     <div className="col-span-4 flex items-center gap-3 min-w-0">
                       <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-                        style={{ background: cat.color + '15' }}
+                        className="w-10 h-10 rounded-xl flex items-center justify-center text-base border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50 dark:bg-purple-950/40 shadow-[2px_2px_0px_0px_#9333ea] flex-shrink-0"
                       >
                         {tx.type === 'transfer' ? '↔️' : cat.icon}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
+                        <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
                           {tx.note || cat.name}
                         </p>
                         <div className="mt-0.5">
@@ -200,35 +199,35 @@ export function TransactionsPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-span-2 text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 truncate">
+                    <div className="col-span-2 text-xs font-semibold text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 truncate">
                       <span>{cat.icon}</span> <span>{cat.name}</span>
                     </div>
-                    <div className="col-span-2 text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 truncate">
+                    <div className="col-span-2 text-xs font-semibold text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 truncate">
                       <span>{acc?.icon || '💳'}</span> <span>{acc?.name || '-'}</span>
                     </div>
-                    <div className="col-span-2 text-xs text-zinc-500 dark:text-zinc-400">
+                    <div className="col-span-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
                       {formatDate(tx.date)}
                     </div>
-                    <div className={`col-span-1 text-right font-bold text-sm ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-blue-500'}`}>
+                    <div className={`col-span-1 text-right font-black text-sm ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-purple-600'}`}>
                       {isIncome ? '+' : isExpense ? '-' : ''}
                       {formatCompact(tx.amount)}
                     </div>
-                    <div className="col-span-1 flex justify-end gap-1">
+                    <div className="col-span-1 flex justify-end gap-1.5">
                       <button
                         onClick={() => handleEdit(tx)}
                         id={`edit-tx-${tx.id}`}
-                        className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-purple-600 hover:bg-purple-50 shadow-[1px_1px_0px_0px_#000] transition-colors cursor-pointer"
                         title="Edit Transaksi"
                       >
-                        <Edit2 size={14} />
+                        <Edit2 size={13} />
                       </button>
                       <button
                         onClick={() => setDeleteId(tx.id)}
                         id={`delete-tx-${tx.id}`}
-                        className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-rose-600 hover:bg-rose-50 shadow-[1px_1px_0px_0px_#000] transition-colors cursor-pointer"
                         title="Hapus Transaksi"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={13} />
                       </button>
                     </div>
                   </div>
@@ -237,7 +236,7 @@ export function TransactionsPage() {
             </div>
 
             {/* Mobile Card List View (Visible only on mobile / small screens) */}
-            <div className="block md:hidden divide-y divide-zinc-100 dark:divide-zinc-900">
+            <div className="block md:hidden divide-y-2 divide-zinc-100 dark:divide-zinc-900">
               {paginated.map((tx) => {
                 const cat = getCategoryById(tx.categoryId)
                 const acc = accounts.find(a => a.id === tx.accountId)
@@ -250,8 +249,7 @@ export function TransactionsPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
                         <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 shadow-2xs"
-                          style={{ background: cat.color + '15' }}
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50 dark:bg-purple-950/40 shadow-[2px_2px_0px_0px_#9333ea]"
                         >
                           {tx.type === 'transfer' ? '↔️' : cat.icon}
                         </div>
@@ -259,14 +257,14 @@ export function TransactionsPage() {
                           <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
                             {tx.note || cat.name}
                           </p>
-                          <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5 font-medium">
                             <span>{cat.icon} {cat.name}</span>
                           </p>
                         </div>
                       </div>
 
                       <div className="text-right flex-shrink-0">
-                        <p className={`text-base font-black ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-blue-500'}`}>
+                        <p className={`text-base font-black ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : isExpense ? 'text-zinc-900 dark:text-zinc-100' : 'text-purple-600'}`}>
                           {isIncome ? '+' : isExpense ? '-' : ''}{formatCurrency(tx.amount)}
                         </p>
                         <div className="mt-0.5 flex justify-end">
@@ -278,31 +276,31 @@ export function TransactionsPage() {
                     </div>
 
                     {/* Bottom Row: Account, Date, and Actions */}
-                    <div className="flex items-center justify-between pt-1 border-t border-zinc-100 dark:border-zinc-900/80 text-xs text-zinc-400">
+                    <div className="flex items-center justify-between pt-1 border-t border-zinc-100 dark:border-zinc-900 text-xs text-zinc-400">
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 text-zinc-600 dark:text-zinc-300 font-medium">
+                        <span className="inline-flex items-center gap-1 text-zinc-700 dark:text-zinc-300 font-bold">
                           {acc?.icon || '💳'} {acc?.name || '-'}
                         </span>
                         <span>&bull;</span>
-                        <span>{formatDate(tx.date)}</span>
+                        <span className="font-medium">{formatDate(tx.date)}</span>
                       </div>
 
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => handleEdit(tx)}
                           id={`edit-mobile-tx-${tx.id}`}
-                          className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-purple-600 hover:bg-purple-50 shadow-[1px_1px_0px_0px_#000] transition-colors cursor-pointer"
                           aria-label="Edit"
                         >
-                          <Edit2 size={15} />
+                          <Edit2 size={13} />
                         </button>
                         <button
                           onClick={() => setDeleteId(tx.id)}
                           id={`delete-mobile-tx-${tx.id}`}
-                          className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-rose-600 hover:bg-rose-50 shadow-[1px_1px_0px_0px_#000] transition-colors cursor-pointer"
                           aria-label="Hapus"
                         >
-                          <Trash2 size={15} />
+                          <Trash2 size={13} />
                         </button>
                       </div>
                     </div>

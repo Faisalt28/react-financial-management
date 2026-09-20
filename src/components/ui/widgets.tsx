@@ -11,19 +11,19 @@ export interface ProgressBarProps {
 
 export function ProgressBar({ current, target, className = '', showLabel = true, color }: ProgressBarProps) {
   const pct = calcProgress(current, target)
-  const barColor = color || getProgressColor(pct)
+  const barColor = color || (pct >= 100 ? '#f43f5e' : pct >= 80 ? '#f59e0b' : '#9333ea')
 
   return (
     <div className={className}>
       {showLabel && (
         <div className="flex justify-between items-center mb-1.5">
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">{pct}%</span>
+          <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">{pct}%</span>
         </div>
       )}
-      <div className="h-2 w-full rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+      <div className="h-3 w-full rounded-full border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 overflow-hidden p-[1px]">
         <div
           className="h-full rounded-full transition-all duration-500"
-          style={{ width: `${pct}%`, background: barColor }}
+          style={{ width: `${Math.min(pct, 100)}%`, background: barColor }}
         />
       </div>
     </div>
@@ -38,16 +38,16 @@ export interface BadgeProps {
 
 export function Badge({ children, variant = 'default', className = '' }: BadgeProps) {
   const variants: Record<string, string> = {
-    default: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700',
-    income: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20',
-    expense: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20',
-    transfer: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20',
-    warning: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20',
-    success: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20',
-    danger: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20',
+    default: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-2 border-zinc-950 dark:border-zinc-800',
+    income: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-2 border-zinc-950 dark:border-zinc-800',
+    expense: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-2 border-zinc-950 dark:border-zinc-800',
+    transfer: 'bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border-2 border-zinc-950 dark:border-zinc-800',
+    warning: 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-2 border-zinc-950 dark:border-zinc-800',
+    success: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-2 border-zinc-950 dark:border-zinc-800',
+    danger: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-2 border-zinc-950 dark:border-zinc-800',
   }
   return (
-    <span className={cn('inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium', variants[variant] || variants.default, className)}>
+    <span className={cn('inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold tracking-tight shadow-[2px_2px_0px_0px_#9333ea]', variants[variant] || variants.default, className)}>
       {children}
     </span>
   )
@@ -62,25 +62,24 @@ export interface StatCardProps {
   trend?: number
 }
 
-export function StatCard({ icon, label, value, sub, color = '#6366f1', trend }: StatCardProps) {
+export function StatCard({ icon, label, value, sub, color = '#9333ea', trend }: StatCardProps) {
   return (
-    <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 p-5 shadow-xs transition-all hover:border-zinc-300 dark:hover:border-zinc-700">
+    <div className="rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5 shadow-[4px_4px_0px_0px_#9333ea] transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#9333ea]">
       <div className="flex items-start justify-between mb-3">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-          style={{ background: `${color}15`, border: `1px solid ${color}30` }}
+          className="w-11 h-11 rounded-xl flex items-center justify-center text-xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50 dark:bg-purple-950/30 text-purple-600 dark:text-purple-400 font-black shadow-[2px_2px_0px_0px_#9333ea]"
         >
           {icon}
         </div>
         {trend !== undefined && (
-          <span className={cn('text-xs font-medium', trend >= 0 ? 'text-emerald-500' : 'text-rose-500')}>
+          <span className={cn('text-xs font-bold px-2 py-0.5 rounded border border-zinc-950 dark:border-zinc-700 shadow-[1px_1px_0px_0px_#000]', trend >= 0 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300')}>
             {trend >= 0 ? '↑' : '↓'} {Math.abs(trend)}%
           </span>
         )}
       </div>
-      <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">{label}</p>
-      <p className="text-xl font-bold text-zinc-900 dark:text-white">{value}</p>
-      {sub && <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{sub}</p>}
+      <p className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1">{label}</p>
+      <p className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">{value}</p>
+      {sub && <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium">{sub}</p>}
     </div>
   )
 }

@@ -117,32 +117,32 @@ export function ReportsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Month navigation */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 shadow-2xs">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea]">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setCurrentDate(d => subMonths(d, 1))}
             id="rep-prev-month"
-            className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer"
+            className="p-2 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-purple-50 dark:hover:bg-purple-950 shadow-[2px_2px_0px_0px_#000] transition-colors cursor-pointer"
             title="Bulan Sebelumnya"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
-          <span className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white min-w-[160px] sm:min-w-[180px] text-center">
+          <span className="text-base sm:text-lg font-black text-zinc-900 dark:text-white uppercase tracking-tight min-w-[160px] sm:min-w-[180px] text-center">
             {format(currentDate, 'MMMM yyyy', { locale: idLocale })}
           </span>
           <button
             onClick={() => setCurrentDate(d => addMonths(d, 1))}
             id="rep-next-month"
-            className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer"
+            className="p-2 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-purple-50 dark:hover:bg-purple-950 shadow-[2px_2px_0px_0px_#000] transition-colors cursor-pointer"
             title="Bulan Berikutnya"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
         </div>
 
         <button
           onClick={() => setCurrentDate(new Date())}
-          className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition-colors"
+          className="text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-600 text-white hover:bg-purple-700 shadow-[2px_2px_0px_0px_#000] transition-colors cursor-pointer"
         >
           Bulan Ini
         </button>
@@ -174,10 +174,10 @@ export function ReportsPage() {
       </div>
 
       {/* Explanation Banner for Net / Sisa Bersih */}
-      <div className="flex items-start gap-2.5 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/80 text-xs text-zinc-600 dark:text-zinc-400">
-        <HelpCircle size={16} className="text-zinc-400 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-2.5 p-3.5 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50/40 dark:bg-purple-950/20 text-xs text-zinc-700 dark:text-zinc-300 shadow-[2px_2px_0px_0px_#9333ea]">
+        <HelpCircle size={16} className="text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
         <p className="leading-relaxed">
-          <strong className="text-zinc-800 dark:text-zinc-200 font-semibold">Catatan Sisa Bersih (Net):</strong> Nilai ini diperoleh dari total <strong>Pemasukan dikurangi Pengeluaran</strong> selama bulan {format(currentDate, 'MMMM yyyy', { locale: idLocale })}. Jika bernilai positif (hijau), kondisi keuangan surplus. Jika bernilai negatif (merah), pengeluaran melebihi pemasukan (defisit).
+          <strong className="text-zinc-900 dark:text-white font-bold uppercase">Catatan Sisa Bersih (Net):</strong> Nilai ini diperoleh dari total <strong>Pemasukan dikurangi Pengeluaran</strong> selama bulan {format(currentDate, 'MMMM yyyy', { locale: idLocale })}. Jika bernilai positif (hijau), kondisi keuangan surplus. Jika bernilai negatif (merah), pengeluaran melebihi pemasukan (defisit).
         </p>
       </div>
 
