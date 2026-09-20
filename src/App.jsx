@@ -13,6 +13,7 @@ import { BudgetPage } from './pages/Budget/BudgetPage.jsx'
 import { GoalsPage } from './pages/Goals/GoalsPage.jsx'
 import { ReportsPage } from './pages/Reports/ReportsPage.jsx'
 import { SettingsPage } from './pages/Settings/SettingsPage.jsx'
+import { LandingPage } from './pages/Landing/LandingPage.jsx'
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuthStore()
@@ -35,6 +36,10 @@ export default function App() {
 
   return (
     <Routes>
+      {/* Landing page */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/landing" element={<LandingPage />} />
+
       {/* Public routes */}
       <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
@@ -51,9 +56,8 @@ export default function App() {
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
-      {/* Redirect root */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }
