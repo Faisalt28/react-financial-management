@@ -30,12 +30,12 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', className
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs overflow-y-auto"
       onClick={(e) => { if (e.target === overlayRef.current) onClose() }}
     >
       <div
         className={cn(
-          'w-full rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 shadow-[8px_8px_0px_0px_#9333ea] transition-all duration-200',
+          'w-full m-auto rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 shadow-[8px_8px_0px_0px_#9333ea] transition-all duration-200 relative',
           sizes[size],
           className
         )}

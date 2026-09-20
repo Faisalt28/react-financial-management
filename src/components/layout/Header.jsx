@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, ArrowRightLeft, Wallet, TrendingUp, Target,
-  BarChart3, Settings, LogOut, Plus, Sun, Moon, Menu, X
+  BarChart3, Settings, Plus, Sun, Moon, Menu, X
 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore.js'
 import { useThemeStore } from '@/store/themeStore.js'
@@ -23,15 +23,9 @@ const navLinks = [
 export function Header() {
   const [showTxModal, setShowTxModal] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, logout } = useAuthStore()
+  const { user } = useAuthStore()
   const { isDark, toggle } = useThemeStore()
-  const navigate = useNavigate()
   const location = useLocation()
-
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
 
   return (
     <>
@@ -117,15 +111,6 @@ export function Header() {
                   {user?.name || 'User'}
                 </span>
               </NavLink>
-
-              {/* Logout Button */}
-              <button
-                onClick={handleLogout}
-                title="Keluar"
-                className="p-2 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#9333ea] transition-colors"
-              >
-                <LogOut size={16} />
-              </button>
 
               {/* Mobile Menu Toggle Button */}
               <button
