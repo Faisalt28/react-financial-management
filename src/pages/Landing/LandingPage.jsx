@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
 import { PromoSection } from '@/components/ui/promo-section'
-import { Sun, Moon, ArrowRight, ArrowUpRight, ArrowDownRight, Wallet, Target, TrendingUp, CheckCircle2 } from 'lucide-react'
+import { Sun, Moon, ArrowRight, Wallet, Target, TrendingUp } from 'lucide-react'
 import logo from '@/assets/logo.png'
 
 export function LandingPage() {
@@ -12,11 +12,11 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-black text-zinc-950 dark:text-zinc-50 transition-colors duration-200">
-      {/* 2D Manga Navigation Header */}
+      {/* Navigation Header */}
       <header className="sticky top-0 z-50 w-full border-b-2 border-zinc-950 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Brand Logo & Manga Badge */}
+            {/* Brand Logo */}
             <div className="flex items-center gap-3">
               <Link to="/" className="flex items-center gap-2.5 group">
                 <img
@@ -28,9 +28,6 @@ export function LandingPage() {
                   AcheeZ
                 </span>
               </Link>
-              <span className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-black uppercase tracking-wider bg-purple-600 text-white rounded-md border border-zinc-950 dark:border-white shadow-[1.5px_1.5px_0px_0px_#000] dark:shadow-[1.5px_1.5px_0px_0px_#fff]">
-                「 財務管理 」
-              </span>
             </div>
 
             {/* Right Action Navigation */}
@@ -77,36 +74,36 @@ export function LandingPage() {
       <main className="flex-1">
         <PromoSection />
 
-        {/* 2D Manga 3-Panel Highlights Section (Concise & Punchy) */}
-        <section className="py-12 border-t-2 border-zinc-950 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-950/60">
+        {/* 3-Panel Highlights Section */}
+        <section className="py-14 border-t-2 border-zinc-950 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-950/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <div className="text-center max-w-xl mx-auto mb-10">
               <span className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
-                「 三大特徴 // 3 FITUR UTAMA 」
+                FITUR UTAMA
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-white mt-1.5">
-                Simpel, Cepat & Terstruktur
+                Fondasi Finansial yang Rapi
               </h2>
             </div>
 
-            {/* 3 Manga Cards */}
+            {/* 3 Feature Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Panel 1: Arus Kas */}
               <div className="p-6 rounded-2xl border-2 border-zinc-950 dark:border-zinc-200 bg-white dark:bg-zinc-900 shadow-[5px_5px_0px_0px_#9333ea] hover:-translate-y-1 transition-transform">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-black text-purple-600 dark:text-purple-400">
-                    「 CH.01 // 収支管理 」
+                    01 // ARUS KAS
                   </span>
                   <div className="p-2 rounded-lg bg-purple-600 text-white border border-zinc-950 dark:border-white shadow-[2px_2px_0px_0px_#000]">
                     <Wallet size={18} />
                   </div>
                 </div>
                 <h3 className="text-lg font-black text-zinc-950 dark:text-white mb-2">
-                  Arus Kas Real-time
+                  Pencatatan Arus Kas
                 </h3>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  Catat mutasi masuk dan keluar dalam hitungan detik. Saldo antar rekening bank dan dompet selalu sinkron.
+                  Catat transaksi uang masuk dan keluar secara terperinci. Saldo setiap rekening kas dan dompet digital Anda selalu sinkron secara otomatis.
                 </p>
               </div>
 
@@ -114,17 +111,17 @@ export function LandingPage() {
               <div className="p-6 rounded-2xl border-2 border-zinc-950 dark:border-zinc-200 bg-white dark:bg-zinc-900 shadow-[5px_5px_0px_0px_#9333ea] hover:-translate-y-1 transition-transform">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-black text-purple-600 dark:text-purple-400">
-                    「 CH.02 // 予算制限 」
+                    02 // ANGGARAN
                   </span>
                   <div className="p-2 rounded-lg bg-purple-600 text-white border border-zinc-950 dark:border-white shadow-[2px_2px_0px_0px_#000]">
                     <TrendingUp size={18} />
                   </div>
                 </div>
                 <h3 className="text-lg font-black text-zinc-950 dark:text-white mb-2">
-                  Pos Anggaran Ketat
+                  Perencanaan Anggaran
                 </h3>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  Batasi jatah pengeluaran per kategori. Visualisasi persentase mencegah pengeluaran melebihi batas bulanan.
+                  Tentukan batas pengeluaran untuk setiap pos kebutuhan bulanan Anda agar alokasi keuangan tetap terjaga secara teratur.
                 </p>
               </div>
 
@@ -132,7 +129,7 @@ export function LandingPage() {
               <div className="p-6 rounded-2xl border-2 border-zinc-950 dark:border-zinc-200 bg-white dark:bg-zinc-900 shadow-[5px_5px_0px_0px_#9333ea] hover:-translate-y-1 transition-transform">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-black text-purple-600 dark:text-purple-400">
-                    「 CH.03 // 貯金目標 」
+                    03 // TABUNGAN
                   </span>
                   <div className="p-2 rounded-lg bg-purple-600 text-white border border-zinc-950 dark:border-white shadow-[2px_2px_0px_0px_#000]">
                     <Target size={18} />
@@ -142,48 +139,25 @@ export function LandingPage() {
                   Target Tabungan
                 </h3>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  Tetapkan impian finansial dan setor dana langsung dari rekening terdaftar hingga target terkumpul 100%.
+                  Rencanakan target dana darurat maupun impian masa depan dengan kemudahan menyetor saldo langsung dari rekening terdaftar.
                 </p>
               </div>
             </div>
           </div>
         </section>
-
-        {/* 2D Manga Bottom Call To Action */}
-        <section className="py-16 px-4">
-          <div className="max-w-4xl mx-auto p-8 sm:p-12 rounded-3xl border-2 border-zinc-950 dark:border-zinc-100 bg-white dark:bg-zinc-950 shadow-[8px_8px_0px_0px_#9333ea] text-center space-y-6">
-            <span className="inline-block px-3 py-1 text-xs font-black uppercase tracking-wider bg-purple-600 text-white rounded-full border border-zinc-950 dark:border-white shadow-[2px_2px_0px_0px_#000]">
-              ★ SIAP MENATA KEUANGAN?
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-zinc-950 dark:text-white tracking-tight">
-              Mulai Langkah Bebas Finansial Hari Ini.
-            </h2>
-            <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-lg mx-auto">
-              Daftar dalam 30 detik tanpa biaya langganan. Data tersimpan aman di Cloudflare D1.
-            </p>
-            <div className="pt-2">
-              <Link to={isAuthenticated ? "/dashboard" : "/register"}>
-                <button className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider bg-purple-600 text-white border-2 border-zinc-950 dark:border-white shadow-[5px_5px_0px_0px_#000] dark:shadow-[5px_5px_0px_0px_#fff] hover:bg-purple-700 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer">
-                  {isAuthenticated ? "Buka Dashboard Saya" : "Buat Akun Gratis Sekarang"}
-                  <ArrowRight size={18} />
-                </button>
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* 2D Manga Footer */}
+      {/* Footer */}
       <footer className="border-t-2 border-zinc-950 dark:border-zinc-800 py-6 bg-white dark:bg-zinc-950 text-center text-xs text-zinc-500 dark:text-zinc-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="font-bold text-zinc-900 dark:text-zinc-100">AcheeZ</span>
             <span>&copy; {new Date().getFullYear()}</span>
             <span>&bull;</span>
-            <span className="text-purple-600 font-semibold">2D Manga Finance</span>
+            <span>Manajemen Keuangan Pribadi</span>
           </div>
           <p className="text-[11px] text-zinc-400">
-            Dibuat untuk pengelolaan finansial pribadi yang disiplin dan presisi.
+            Platform praktis untuk pencatatan dan perencanaan finansial pribadi Anda.
           </p>
         </div>
       </footer>

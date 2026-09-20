@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useMotionValue, animate, motion } from "motion/react";
 import useMeasure from "react-use-measure";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 
 export type InfiniteSliderProps = {
@@ -116,37 +115,37 @@ export function MarqueeEffect({
   );
 }
 
-// Curated high-resolution financial management & modern banking assets
+// Curated high-resolution personal finance assets
 const financialCards = [
   {
     url: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=600&q=80",
-    tag: "「 01 // CASH FLOW 」",
+    tag: "01 // ARUS KAS",
     title: "Catatan Arus Kas",
   },
   {
     url: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=600&q=80",
-    tag: "「 02 // TABUNGAN 」",
+    tag: "02 // TABUNGAN",
     title: "Target Finansial",
   },
   {
     url: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
-    tag: "「 03 // ANGGARAN 」",
+    tag: "03 // ANGGARAN",
     title: "Batas Pengeluaran",
   },
   {
     url: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80",
-    tag: "「 04 // REKENING 」",
-    title: "Dompet & Bank",
+    tag: "04 // REKENING",
+    title: "Dompet & Rekening",
   },
   {
     url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80",
-    tag: "「 05 // LAPORAN 」",
-    title: "Analitik Bulanan",
+    tag: "05 // LAPORAN",
+    title: "Analisis Bulanan",
   },
   {
     url: "https://images.unsplash.com/photo-1580519542036-c47de6196ba5?auto=format&fit=crop&w=600&q=80",
-    tag: "「 06 // DANA DARURAT 」",
-    title: "Pos Simpanan",
+    tag: "06 // SIMPANAN",
+    title: "Pos Dana Darurat",
   },
 ];
 
@@ -167,29 +166,29 @@ export default function PromoSection() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
-          {/* Manga Content Hero Column */}
+          {/* Content Hero Column */}
           <header className="relative z-10 mx-auto max-w-xl text-center lg:mx-0 lg:text-start">
-            {/* Manga 2D Badge */}
+            {/* 2D Solid Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-purple-600 text-white border-2 border-zinc-950 dark:border-white shadow-[3px_3px_0px_0px_#000] dark:shadow-[3px_3px_0px_0px_#fff] mb-6">
-              <Sparkles size={14} className="animate-spin-slow" />
-              <span>「 財務管理 // ACHEEZ 2.0 」</span>
+              <Sparkles size={14} />
+              <span>MANAJEMEN KEUANGAN PRIBADI</span>
             </div>
 
-            {/* Sharp Headline */}
+            {/* Headline */}
             <h1 className="mb-5 text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white tracking-tight leading-[1.1]">
-              Kelola Finansial{" "}
+              Kelola Finansial Pribadi{" "}
               <span className="relative inline-block text-purple-600 dark:text-purple-400">
-                Tanpa Bocor.
+                Lebih Terarah.
                 <span className="absolute bottom-1 left-0 w-full h-1 bg-purple-600 -z-10 transform -rotate-1" />
               </span>
             </h1>
 
-            {/* Concise Description (Not overwhelming) */}
+            {/* Professional, expanded description */}
             <p className="text-zinc-600 dark:text-zinc-300 text-base sm:text-lg leading-relaxed mb-8">
-              Buku kas modern dengan gaya 2D manga yang presisi. Pantau mutasi uang masuk & keluar, tetapkan batas anggaran ketat, serta setor tabungan impian dengan kontrol penuh.
+              AcheeZ membantu Anda mencatat setiap alur pemasukan dan pengeluaran harian, mengalokasikan pos anggaran belanja secara bijak, serta merencanakan target tabungan masa depan dalam satu wadah yang terstruktur dan mudah dipantau.
             </p>
 
-            {/* Manga Action Buttons */}
+            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               {isAuthenticated ? (
                 <Link to="/dashboard" className="w-full sm:w-auto">
@@ -215,22 +214,9 @@ export default function PromoSection() {
                 </>
               )}
             </div>
-
-            {/* Quick 2D Manga Badges */}
-            <div className="mt-8 pt-6 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 flex items-center justify-center lg:justify-start gap-6 text-xs font-bold text-zinc-500 dark:text-zinc-400">
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck size={16} className="text-purple-600" />
-                Database Cloud D1
-              </span>
-              <span>&bull;</span>
-              <span className="flex items-center gap-1.5">
-                <Zap size={16} className="text-purple-600" />
-                Respon Super Cepat
-              </span>
-            </div>
           </header>
 
-          {/* 2D Manga Visual Marquee Column */}
+          {/* 2D Visual Marquee Column */}
           <div
             className="relative grid h-[420px] sm:h-[500px] grid-cols-2 gap-4 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)]"
           >
@@ -258,10 +244,10 @@ export default function PromoSection() {
                         className="w-full h-full object-cover grayscale contrast-110 group-hover:grayscale-0 transition-all duration-500"
                         loading="lazy"
                       />
-                      {/* Manga Screentone Frame Overlay */}
+                      {/* Frame Overlay */}
                       <div className="absolute inset-0 bg-purple-900/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
 
-                      {/* 2D Manga Badge Overlay on Image */}
+                      {/* 2D Badge Overlay on Image */}
                       <div className="absolute bottom-2.5 left-2.5 right-2.5 p-2 rounded-xl bg-white/95 dark:bg-zinc-950/95 border border-zinc-950 dark:border-zinc-100 shadow-[2px_2px_0px_0px_#9333ea] backdrop-blur-xs">
                         <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-wider">
                           {item.tag}
