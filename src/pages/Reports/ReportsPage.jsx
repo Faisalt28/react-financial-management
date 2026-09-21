@@ -3,7 +3,7 @@ import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts'
-import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTransactionStore } from '../../store/transactionStore.js'
 import { Card, CardHeader, CardTitle, StatCard } from '@/components/ui'
 import { formatCurrency, formatCompact } from '../../lib/constants.js'
@@ -283,14 +283,6 @@ export function ReportsPage() {
           sub={`${summary.net >= 0 ? '+' : ''}${formatCurrency(summary.net)}`}
           color={summary.net >= 0 ? '#10b981' : '#f43f5e'}
         />
-      </div>
-
-      {/* Explanation Banner for Net / Sisa Bersih */}
-      <div className="flex items-start gap-2.5 p-3.5 rounded-2xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50/40 dark:bg-purple-950/20 text-xs text-zinc-700 dark:text-zinc-300 shadow-[2px_2px_0px_0px_#9333ea]">
-        <HelpCircle size={16} className="text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
-        <p className="leading-relaxed">
-          <strong className="text-zinc-900 dark:text-white font-bold uppercase">Catatan Sisa Bersih (Net):</strong> Nilai ini diperoleh dari total <strong>Pemasukan dikurangi Pengeluaran</strong> selama bulan {format(currentDate, 'MMMM yyyy', { locale: idLocale })}. Jika bernilai positif (hijau), kondisi keuangan surplus. Jika bernilai negatif (merah), pengeluaran melebihi pemasukan (defisit).
-        </p>
       </div>
 
       {/* Charts */}
