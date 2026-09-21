@@ -8,6 +8,7 @@ import { useTransactionStore } from '../../store/transactionStore.js'
 import { Card, CardHeader, CardTitle, StatCard } from '@/components/ui'
 import { formatCurrency, formatCompact } from '../../lib/constants.js'
 import { getCategoryById, getLastNMonths, parseTxDate, cn } from '../../lib/utils.js'
+import { AnimatedCard, CardVisual, Visual3 } from '@/components/ui/animated-card-chart'
 import { getMonth, getYear, subMonths, addMonths, format } from 'date-fns'
 import { id as idLocale } from 'date-fns/locale'
 
@@ -191,6 +192,9 @@ export function ReportsPage() {
     })
   }, [months6, transactions, getMonthSummary])
 
+  const totalIncome6m = useMemo(() => trendData.reduce((s, d) => s + (d.Pemasukan || 0), 0), [trendData])
+  const totalExpense6m = useMemo(() => trendData.reduce((s, d) => s + (d.Pengeluaran || 0), 0), [trendData])
+
   // Daily spending this month
   const dailyData = useMemo(() => {
     const dailyMap = {}
@@ -275,25 +279,50 @@ export function ReportsPage() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Bar chart 6 months */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Tren 6 Bulan Terakhir</CardTitle>
-          </CardHeader>
-          <div className="p-6 pt-0">
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={trendData} barSize={20}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={formatCompact} />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend wrapperStyle={{ fontSize: 12, color: '#71717a' }} />
-                <Bar dataKey="Pemasukan" fill="#10b981" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Pengeluaran" fill="#f43f5e" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        {/* Animated 6-Month Trend Chart */}
+        <AnimatedCard className="lg:col-span-2 flex flex-col justify-between border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
+          <div className="p-5 pb-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white uppercase">
+              Tren 6 Bulan Terakhir
+            </h3>
+            <div className="flex items-center gap-2.5">
+              <span className="flex items-center gap-1.5 text-[11px] font-black text-purple-600 dark:text-purple-400">
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-600 shadow-[1px_1px_0px_0px_#000]" /> Masuk
+              </span>
+              <span className="flex items-center gap-1.5 text-[11px] font-black text-emerald-600 dark:text-emerald-400">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[1px_1px_0px_0px_#000]" /> Keluar
+              </span>
+            </div>
           </div>
-        </Card>
+
+          <CardVisual className="h-[210px] w-full flex items-center justify-center">
+            <Visual3
+              mainColor="#9333ea"
+              secondaryColor="#10b981"
+              badge1Text={`Masuk: ${formatCompact(totalIncome6m)}`}
+              badge2Text={`Keluar: ${formatCompact(totalExpense6m)}`}
+              hoverTitle="Tren Finansial 6 Bulan"
+              hoverDesc="Fluktuasi akumulasi pemasukan dan pengeluaran"
+              trendData={trendData}
+            />
+          </CardVisual>
+
+          {/* Minimalist 6-month breakdown row */}
+          <div className="p-4 pt-0 border-t-2 border-zinc-100 dark:border-zinc-800/80">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 pt-2.5 text-center">
+              {trendData.map((d) => (
+                <div
+                  key={d.name}
+                  className="p-1.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 shadow-[1px_1px_0px_0px_#000]"
+                >
+                  <p className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase">{d.name}</p>
+                  <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 truncate">+{formatCompact(d.Pemasukan)}</p>
+                  <p className="text-[10px] font-black text-rose-500 truncate">-{formatCompact(d.Pengeluaran)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AnimatedCard>
 
         {/* Pie chart by category (2D Manga / Japanese Aesthetic) */}
         <Card className="flex flex-col border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
