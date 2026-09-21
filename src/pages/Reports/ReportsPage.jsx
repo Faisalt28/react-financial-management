@@ -285,325 +285,337 @@ export function ReportsPage() {
         />
       </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-        {/* Bar chart 6 months (2D Manga Aesthetic - Compact) */}
-        <Card className="lg:col-span-2 border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
-          <CardHeader className="p-4 sm:p-5 pb-1">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <CardTitle>Tren 6 Bulan Terakhir</CardTitle>
-              {/* Manga Legend Pills */}
-              <div className="flex items-center gap-2 text-xs font-bold self-start sm:self-auto">
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md border-2 border-zinc-950 dark:border-zinc-700 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 shadow-[1px_1px_0px_0px_#000]">
-                  <span className="w-2 h-2 rounded-xs bg-emerald-500 border border-zinc-950" />
-                  <span>Pemasukan</span>
+      {/* Charts - Balanced Bento Grid (Saling Mengisi) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+        {/* Left Column (Span 2): Stacks 6-Month Trend & Daily Spending */}
+        <div className="lg:col-span-2 flex flex-col gap-4">
+          {/* 1. Bar chart 6 months */}
+          <Card className="border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
+            <CardHeader className="p-4 sm:p-5 pb-1">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <CardTitle>Tren 6 Bulan Terakhir</CardTitle>
+                {/* Manga Legend Pills */}
+                <div className="flex items-center gap-2 text-xs font-bold self-start sm:self-auto">
+                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md border-2 border-zinc-950 dark:border-zinc-700 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 shadow-[1px_1px_0px_0px_#000]">
+                    <span className="w-2 h-2 rounded-xs bg-emerald-500 border border-zinc-950" />
+                    <span>Pemasukan</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md border-2 border-zinc-950 dark:border-zinc-700 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 shadow-[1px_1px_0px_0px_#000]">
+                    <span className="w-2 h-2 rounded-xs bg-rose-500 border border-zinc-950" />
+                    <span>Pengeluaran</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md border-2 border-zinc-950 dark:border-zinc-700 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 shadow-[1px_1px_0px_0px_#000]">
-                  <span className="w-2 h-2 rounded-xs bg-rose-500 border border-zinc-950" />
-                  <span>Pengeluaran</span>
+              </div>
+            </CardHeader>
+            <div className="p-4 sm:p-5 pt-1 space-y-3">
+              <div className="w-full h-48 sm:h-52">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={trendData}
+                    barGap={3}
+                    barCategoryGap="12%"
+                    margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-200 dark:text-zinc-800" vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
+                      axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
+                      tickLine={false}
+                      dy={4}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
+                      axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
+                      tickLine={false}
+                      tickFormatter={formatCompact}
+                      dx={-2}
+                    />
+                    <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 100, outline: 'none' }} />
+                    <Bar
+                      dataKey="Pemasukan"
+                      fill="#10b981"
+                      stroke="#09090b"
+                      strokeWidth={2}
+                      radius={[4, 4, 0, 0]}
+                      maxBarSize={26}
+                    />
+                    <Bar
+                      dataKey="Pengeluaran"
+                      fill="#f43f5e"
+                      stroke="#09090b"
+                      strokeWidth={2}
+                      radius={[4, 4, 0, 0]}
+                      maxBarSize={26}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Compact 6-Month Summary Strip */}
+              <div className="grid grid-cols-3 gap-2 pt-2.5 border-t-2 border-zinc-100 dark:border-zinc-800">
+                <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
+                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Rata-rata Masuk</p>
+                  <p className="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400 mt-0.5">{formatCurrency(trendSummary.avgInc)}</p>
+                </div>
+                <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
+                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Rata-rata Keluar</p>
+                  <p className="text-xs sm:text-sm font-black text-rose-600 dark:text-rose-400 mt-0.5">{formatCurrency(trendSummary.avgExp)}</p>
+                </div>
+                <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
+                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Sisa 6 Bulan</p>
+                  <p className={`text-xs sm:text-sm font-black mt-0.5 ${trendSummary.net6 >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                    {trendSummary.net6 >= 0 ? '+' : ''}{formatCurrency(trendSummary.net6)}
+                  </p>
                 </div>
               </div>
             </div>
-          </CardHeader>
-          <div className="p-4 sm:p-5 pt-1 space-y-3">
-            <div className="w-full h-52 sm:h-56">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={trendData}
-                  barGap={3}
-                  barCategoryGap="12%"
-                  margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-200 dark:text-zinc-800" vertical={false} />
-                  <XAxis
-                    dataKey="name"
-                    tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
-                    axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
-                    tickLine={false}
-                    dy={4}
-                  />
-                  <YAxis
-                    tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
-                    axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
-                    tickLine={false}
-                    tickFormatter={formatCompact}
-                    dx={-2}
-                  />
-                  <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 100, outline: 'none' }} />
-                  <Bar
-                    dataKey="Pemasukan"
-                    fill="#10b981"
-                    stroke="#09090b"
-                    strokeWidth={2}
-                    radius={[4, 4, 0, 0]}
-                    maxBarSize={26}
-                  />
-                  <Bar
-                    dataKey="Pengeluaran"
-                    fill="#f43f5e"
-                    stroke="#09090b"
-                    strokeWidth={2}
-                    radius={[4, 4, 0, 0]}
-                    maxBarSize={26}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+          </Card>
 
-            {/* Compact 6-Month Summary Strip */}
-            <div className="grid grid-cols-3 gap-2 pt-2.5 border-t-2 border-zinc-100 dark:border-zinc-800">
-              <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Rata-rata Masuk</p>
-                <p className="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400 mt-0.5">{formatCurrency(trendSummary.avgInc)}</p>
-              </div>
-              <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Rata-rata Keluar</p>
-                <p className="text-xs sm:text-sm font-black text-rose-600 dark:text-rose-400 mt-0.5">{formatCurrency(trendSummary.avgExp)}</p>
-              </div>
-              <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Sisa 6 Bulan</p>
-                <p className={`text-xs sm:text-sm font-black mt-0.5 ${trendSummary.net6 >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
-                  {trendSummary.net6 >= 0 ? '+' : ''}{formatCurrency(trendSummary.net6)}
-                </p>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Pie chart by category (2D Manga / Japanese Aesthetic) */}
-        <Card className="flex flex-col border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
-          <CardHeader className="pb-2">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <CardTitle>Proporsi Keuangan</CardTitle>
-                </div>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
-                  Distribusi persentase per kategori
-                </p>
-              </div>
-
-              {/* Mode Toggle: Pengeluaran / Pemasukan */}
-              <div className="flex items-center p-1 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 self-start sm:self-auto shadow-[2px_2px_0px_0px_#000]">
-                <button
-                  type="button"
-                  onClick={() => { setPieMode('expense'); setHoveredPieIndex(null); }}
-                  className={cn(
-                    'px-2.5 py-1 text-xs font-black uppercase tracking-tight rounded-lg transition-all cursor-pointer',
-                    pieMode === 'expense'
-                      ? 'bg-rose-600 text-white shadow-[2px_2px_0px_0px_#000] border border-zinc-950'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
-                  )}
-                >
-                  Pengeluaran
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setPieMode('income'); setHoveredPieIndex(null); }}
-                  className={cn(
-                    'px-2.5 py-1 text-xs font-black uppercase tracking-tight rounded-lg transition-all cursor-pointer',
-                    pieMode === 'income'
-                      ? 'bg-emerald-600 text-white shadow-[2px_2px_0px_0px_#000] border border-zinc-950'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
-                  )}
-                >
-                  Pemasukan
-                </button>
-              </div>
-            </div>
-          </CardHeader>
-
-          <div className="p-6 pt-2 flex-1 flex flex-col justify-between">
-            {activeCategoryData.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-56 text-zinc-400 text-sm gap-2.5 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
-                <span className="text-4xl">📊</span>
-                <p className="font-bold text-center text-xs">
-                  Belum ada transaksi {pieMode === 'expense' ? 'pengeluaran' : 'pemasukan'} pada bulan {format(currentDate, 'MMMM yyyy', { locale: idLocale })}.
-                </p>
-              </div>
-            ) : (
-              <>
-                {/* Visual Chart with Donut Center Badge */}
-                <div className="relative w-full h-60 my-1 flex items-center justify-center">
+          {/* 2. Daily Spending (Pengeluaran Harian Bulan Ini) */}
+          <Card className="border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea] flex-1 flex flex-col justify-between">
+            <CardHeader className="p-4 sm:p-5 pb-1">
+              <CardTitle>Pengeluaran Harian Bulan Ini</CardTitle>
+            </CardHeader>
+            <div className="p-4 sm:p-5 pt-1 flex-1 flex flex-col justify-center">
+              {dailyData.length > 0 ? (
+                <div className="w-full h-44 sm:h-48">
                   <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={activeCategoryData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={55}
-                        outerRadius={82}
-                        paddingAngle={3}
-                        dataKey="amount"
-                        nameKey="name"
-                        onMouseEnter={(_, index) => setHoveredPieIndex(index)}
-                        onMouseLeave={() => setHoveredPieIndex(null)}
-                      >
-                        {activeCategoryData.map((entry, index) => {
-                          const isHovered = hoveredPieIndex === index
-                          const isDimmed = hoveredPieIndex !== null && !isHovered
-                          return (
-                            <Cell
-                              key={`slice-${entry.id}`}
-                              fill={entry.color}
-                              stroke="#09090b"
-                              strokeWidth={isHovered ? 3.5 : 2.5}
-                              style={{
-                                filter: isHovered ? 'drop-shadow(0 0 6px rgba(147, 51, 234, 0.5))' : 'none',
-                                opacity: isDimmed ? 0.35 : 1,
-                                transition: 'opacity 0.2s, stroke-width 0.2s',
-                                cursor: 'pointer',
-                              }}
-                            />
-                          )
-                        })}
-                      </Pie>
-                      <Tooltip
-                        content={<MangaPieTooltip />}
-                        wrapperStyle={{ zIndex: 100, outline: 'none', pointerEvents: 'none' }}
+                    <LineChart data={dailyData} margin={{ top: 8, right: 12, left: -16, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-200 dark:text-zinc-800" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }} axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }} tickLine={false} dy={4} />
+                      <YAxis tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }} axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }} tickLine={false} tickFormatter={formatCompact} dx={-2} />
+                      <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 100, outline: 'none' }} />
+                      <Line
+                        type="monotone"
+                        dataKey="Pengeluaran"
+                        stroke="#f43f5e"
+                        strokeWidth={2.5}
+                        dot={{ fill: '#f43f5e', stroke: '#09090b', strokeWidth: 1.5, r: 3.5 }}
+                        activeDot={{ fill: '#f43f5e', stroke: '#09090b', strokeWidth: 2, r: 5 }}
                       />
-                    </PieChart>
+                    </LineChart>
                   </ResponsiveContainer>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-44 text-zinc-400 text-xs font-bold gap-2">
+                  <span className="text-2xl">📈</span>
+                  <p>Belum ada transaksi pengeluaran harian pada bulan ini.</p>
+                </div>
+              )}
+            </div>
+          </Card>
+        </div>
 
-                  {/* Center Hole Information Label with High-Contrast Manga Backing */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-                    <div className="w-[102px] h-[102px] rounded-full bg-white dark:bg-zinc-950 border-2 border-zinc-950 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#9333ea] flex flex-col items-center justify-center p-1.5 text-center">
-                      {activeHovered ? (
-                        <div className="flex flex-col items-center justify-center animate-fade-in">
-                          <span className="text-xl leading-none">{activeHovered.icon}</span>
-                          <span className="text-sm font-black text-purple-600 dark:text-purple-400 leading-none mt-1">
-                            {activeHovered.pct}%
-                          </span>
-                          <span className="text-[11px] font-black text-zinc-950 dark:text-zinc-100 truncate max-w-[84px] mt-0.5">
-                            {activeHovered.name}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center justify-center">
-                          <span className="text-lg leading-none">{pieMode === 'expense' ? '💸' : '💰'}</span>
-                          <span className="text-xs font-black text-zinc-950 dark:text-white leading-tight mt-0.5">
-                            {formatCompact(activeTotal)}
-                          </span>
-                          <span className="text-[8px] font-black tracking-wider text-purple-600 dark:text-purple-400 uppercase mt-0.5">
-                            {pieMode === 'expense' ? 'PENGELUARAN' : 'PEMASUKAN'}
-                          </span>
-                        </div>
-                      )}
+        {/* Right Column (Span 1): Proporsi Keuangan (Stretches to fill right column) */}
+        <div className="lg:col-span-1 flex flex-col">
+          <Card className="flex-1 flex flex-col justify-between border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
+            <CardHeader className="pb-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <CardTitle>Proporsi Keuangan</CardTitle>
+                  </div>
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
+                    Distribusi persentase per kategori
+                  </p>
+                </div>
+
+                {/* Mode Toggle: Pengeluaran / Pemasukan */}
+                <div className="flex items-center p-1 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 self-start sm:self-auto shadow-[2px_2px_0px_0px_#000]">
+                  <button
+                    type="button"
+                    onClick={() => { setPieMode('expense'); setHoveredPieIndex(null); }}
+                    className={cn(
+                      'px-2.5 py-1 text-xs font-black uppercase tracking-tight rounded-lg transition-all cursor-pointer',
+                      pieMode === 'expense'
+                        ? 'bg-rose-600 text-white shadow-[2px_2px_0px_0px_#000] border border-zinc-950'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                    )}
+                  >
+                    Pengeluaran
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setPieMode('income'); setHoveredPieIndex(null); }}
+                    className={cn(
+                      'px-2.5 py-1 text-xs font-black uppercase tracking-tight rounded-lg transition-all cursor-pointer',
+                      pieMode === 'income'
+                        ? 'bg-emerald-600 text-white shadow-[2px_2px_0px_0px_#000] border border-zinc-950'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                    )}
+                  >
+                    Pemasukan
+                  </button>
+                </div>
+              </div>
+            </CardHeader>
+
+            <div className="p-6 pt-2 flex-1 flex flex-col justify-between">
+              {activeCategoryData.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-56 text-zinc-400 text-sm gap-2.5 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
+                  <span className="text-4xl">📊</span>
+                  <p className="font-bold text-center text-xs">
+                    Belum ada transaksi {pieMode === 'expense' ? 'pengeluaran' : 'pemasukan'} pada bulan {format(currentDate, 'MMMM yyyy', { locale: idLocale })}.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* Visual Chart with Donut Center Badge */}
+                  <div className="relative w-full h-60 my-1 flex items-center justify-center">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={activeCategoryData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={55}
+                          outerRadius={82}
+                          paddingAngle={3}
+                          dataKey="amount"
+                          nameKey="name"
+                          onMouseEnter={(_, index) => setHoveredPieIndex(index)}
+                          onMouseLeave={() => setHoveredPieIndex(null)}
+                        >
+                          {activeCategoryData.map((entry, index) => {
+                            const isHovered = hoveredPieIndex === index
+                            const isDimmed = hoveredPieIndex !== null && !isHovered
+                            return (
+                              <Cell
+                                key={`slice-${entry.id}`}
+                                fill={entry.color}
+                                stroke="#09090b"
+                                strokeWidth={isHovered ? 3.5 : 2.5}
+                                style={{
+                                  filter: isHovered ? 'drop-shadow(0 0 6px rgba(147, 51, 234, 0.5))' : 'none',
+                                  opacity: isDimmed ? 0.35 : 1,
+                                  transition: 'opacity 0.2s, stroke-width 0.2s',
+                                  cursor: 'pointer',
+                                }}
+                              />
+                            )
+                          })}
+                        </Pie>
+                        <Tooltip
+                          content={<MangaPieTooltip />}
+                          wrapperStyle={{ zIndex: 100, outline: 'none', pointerEvents: 'none' }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+
+                    {/* Center Hole Information Label with High-Contrast Manga Backing */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+                      <div className="w-[102px] h-[102px] rounded-full bg-white dark:bg-zinc-950 border-2 border-zinc-950 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#9333ea] flex flex-col items-center justify-center p-1.5 text-center">
+                        {activeHovered ? (
+                          <div className="flex flex-col items-center justify-center animate-fade-in">
+                            <span className="text-xl leading-none">{activeHovered.icon}</span>
+                            <span className="text-sm font-black text-purple-600 dark:text-purple-400 leading-none mt-1">
+                              {activeHovered.pct}%
+                            </span>
+                            <span className="text-[11px] font-black text-zinc-950 dark:text-zinc-100 truncate max-w-[84px] mt-0.5">
+                              {activeHovered.name}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center">
+                            <span className="text-lg leading-none">{pieMode === 'expense' ? '💸' : '💰'}</span>
+                            <span className="text-xs font-black text-zinc-900 dark:text-white leading-tight mt-0.5">
+                              {formatCompact(activeTotal)}
+                            </span>
+                            <span className="text-[8px] font-black tracking-wider text-purple-600 dark:text-purple-400 uppercase mt-0.5">
+                              {pieMode === 'expense' ? 'PENGELUARAN' : 'PEMASUKAN'}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Clear Breakdown List with Distinct Colors */}
-                <div className="space-y-2 mt-2 pt-3 border-t-2 border-zinc-100 dark:border-zinc-800">
-                  <div className="flex items-center justify-between text-[11px] font-black uppercase text-zinc-400 tracking-wider px-1">
-                    <span>Kategori ({activeCategoryData.length} Pos)</span>
-                    <span>Nominal / Porsi</span>
-                  </div>
+                  {/* Clear Breakdown List with Distinct Colors */}
+                  <div className="space-y-2 mt-2 pt-3 border-t-2 border-zinc-100 dark:border-zinc-800">
+                    <div className="flex items-center justify-between text-[11px] font-black uppercase text-zinc-400 tracking-wider px-1">
+                      <span>Kategori ({activeCategoryData.length} Pos)</span>
+                      <span>Nominal / Porsi</span>
+                    </div>
 
-                  <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
-                    {(showAllPieCategories ? activeCategoryData : activeCategoryData.slice(0, 4)).map((c, idx) => {
-                      const isHovered = hoveredPieIndex === idx
-                      return (
-                        <div
-                          key={c.id}
-                          onMouseEnter={() => setHoveredPieIndex(idx)}
-                          onMouseLeave={() => setHoveredPieIndex(null)}
-                          className={cn(
-                            'p-2 rounded-xl border-2 transition-all cursor-pointer',
-                            isHovered
-                              ? 'border-purple-600 dark:border-purple-500 bg-purple-50/80 dark:bg-purple-950/40 shadow-[2px_2px_0px_0px_#9333ea]'
-                              : 'border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]'
-                          )}
-                        >
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-2 min-w-0">
-                              <span
-                                className="w-3.5 h-3.5 rounded border-2 border-zinc-950 flex-shrink-0 shadow-[1px_1px_0px_0px_#000]"
-                                style={{ backgroundColor: c.color }}
+                    <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+                      {(showAllPieCategories ? activeCategoryData : activeCategoryData.slice(0, 4)).map((c, idx) => {
+                        const isHovered = hoveredPieIndex === idx
+                        return (
+                          <div
+                            key={c.id}
+                            onMouseEnter={() => setHoveredPieIndex(idx)}
+                            onMouseLeave={() => setHoveredPieIndex(null)}
+                            className={cn(
+                              'p-2 rounded-xl border-2 transition-all cursor-pointer',
+                              isHovered
+                                ? 'border-purple-600 dark:border-purple-500 bg-purple-50/80 dark:bg-purple-950/40 shadow-[2px_2px_0px_0px_#9333ea]'
+                                : 'border-zinc-950 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]'
+                            )}
+                          >
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span
+                                  className="w-3.5 h-3.5 rounded border-2 border-zinc-950 flex-shrink-0 shadow-[1px_1px_0px_0px_#000]"
+                                  style={{ backgroundColor: c.color }}
+                                />
+                                <span className="font-extrabold text-zinc-950 dark:text-zinc-100 truncate">
+                                  {c.icon} {c.name}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                <span className="font-black text-zinc-950 dark:text-zinc-100">
+                                  {formatCurrency(c.amount)}
+                                </span>
+                                <span
+                                  className="text-[10px] font-black px-1.5 py-0.5 rounded border-2 border-zinc-950 text-white shadow-[1px_1px_0px_0px_#000]"
+                                  style={{ backgroundColor: c.color }}
+                                >
+                                  {c.pct}%
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Proportion Progress Bar */}
+                            <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-1.5 rounded-full border border-zinc-950/20 dark:border-zinc-700/40 overflow-hidden mt-1.5">
+                              <div
+                                className="h-full rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(c.pct, 100)}%`, backgroundColor: c.color }}
                               />
-                              <span className="font-extrabold text-zinc-950 dark:text-zinc-100 truncate">
-                                {c.icon} {c.name}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2 flex-shrink-0">
-                              <span className="font-black text-zinc-950 dark:text-zinc-100">
-                                {formatCurrency(c.amount)}
-                              </span>
-                              <span
-                                className="text-[10px] font-black px-1.5 py-0.5 rounded border-2 border-zinc-950 text-white shadow-[1px_1px_0px_0px_#000]"
-                                style={{ backgroundColor: c.color }}
-                              >
-                                {c.pct}%
-                              </span>
                             </div>
                           </div>
+                        )
+                      })}
+                    </div>
 
-                          {/* Proportion Progress Bar */}
-                          <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-1.5 rounded-full border border-zinc-950/20 dark:border-zinc-700/40 overflow-hidden mt-1.5">
-                            <div
-                              className="h-full rounded-full transition-all duration-300"
-                              style={{ width: `${Math.min(c.pct, 100)}%`, backgroundColor: c.color }}
-                            />
-                          </div>
-                        </div>
-                      )
-                    })}
+                    {activeCategoryData.length > 4 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllPieCategories(prev => !prev)}
+                        className="w-full py-1 text-center text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 hover:underline cursor-pointer"
+                      >
+                        {showAllPieCategories
+                          ? '▲ Tampilkan Lebih Sedikit'
+                          : `▼ Tampilkan Semua (${activeCategoryData.length} Kategori)`}
+                      </button>
+                    )}
                   </div>
 
-                  {activeCategoryData.length > 4 && (
-                    <button
-                      type="button"
-                      onClick={() => setShowAllPieCategories(prev => !prev)}
-                      className="w-full py-1 text-center text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 hover:underline cursor-pointer"
-                    >
-                      {showAllPieCategories
-                        ? '▲ Tampilkan Lebih Sedikit'
-                        : `▼ Tampilkan Semua (${activeCategoryData.length} Kategori)`}
-                    </button>
+                  {/* Insight Banner */}
+                  {activeCategoryData.length > 0 && (
+                    <div className="mt-3 p-2.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50/60 dark:bg-purple-950/30 text-[11px] flex items-start gap-2 shadow-[2px_2px_0px_0px_#9333ea]">
+                      <span className="text-sm flex-shrink-0">💡</span>
+                      <p className="text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed">
+                        Porsi terbesar adalah <strong className="text-zinc-950 dark:text-white uppercase font-black">{activeCategoryData[0].icon} {activeCategoryData[0].name}</strong> menyumbang <strong className="font-bold text-purple-700 dark:text-purple-300">{activeCategoryData[0].pct}%</strong> ({formatCurrency(activeCategoryData[0].amount)}) dari total {pieMode === 'expense' ? 'pengeluaran' : 'pemasukan'} bulan ini.
+                      </p>
+                    </div>
                   )}
-                </div>
-
-                {/* Insight Banner */}
-                {activeCategoryData.length > 0 && (
-                  <div className="mt-3 p-2.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-800 bg-purple-50/60 dark:bg-purple-950/30 text-[11px] flex items-start gap-2 shadow-[2px_2px_0px_0px_#9333ea]">
-                    <span className="text-sm flex-shrink-0">💡</span>
-                    <p className="text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed">
-                      Porsi terbesar adalah <strong className="text-zinc-950 dark:text-white uppercase font-black">{activeCategoryData[0].icon} {activeCategoryData[0].name}</strong> menyumbang <strong className="font-bold text-purple-700 dark:text-purple-300">{activeCategoryData[0].pct}%</strong> ({formatCurrency(activeCategoryData[0].amount)}) dari total {pieMode === 'expense' ? 'pengeluaran' : 'pemasukan'} bulan ini.
-                    </p>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </Card>
+                </>
+              )}
+            </div>
+          </Card>
+        </div>
       </div>
-
-      {/* Daily spending */}
-      {dailyData.length > 0 && (
-        <Card className="border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
-          <CardHeader>
-            <CardTitle>Pengeluaran Harian Bulan Ini</CardTitle>
-          </CardHeader>
-          <div className="p-6 pt-0">
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={dailyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={formatCompact} />
-                <Tooltip content={<CustomTooltip />} />
-                <Line
-                  type="monotone"
-                  dataKey="Pengeluaran"
-                  stroke="#f43f5e"
-                  strokeWidth={2}
-                  dot={{ fill: '#f43f5e', r: 3 }}
-                  activeDot={{ r: 5 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-      )}
 
       {/* Category breakdown table */}
       {categoryData.length > 0 && (
