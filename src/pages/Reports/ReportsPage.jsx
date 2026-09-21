@@ -49,19 +49,23 @@ const MangaPieTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const item = payload[0].payload
     return (
-      <div className="p-3 text-xs rounded-xl border-2 border-zinc-950 dark:border-zinc-700 bg-white dark:bg-zinc-950 shadow-[4px_4px_0px_0px_#9333ea] space-y-1.5 min-w-[180px]">
-        <div className="flex items-center gap-1.5 pb-1 border-b-2 border-zinc-100 dark:border-zinc-800">
-          <span className="text-base">{item.icon}</span>
-          <span className="font-black text-zinc-900 dark:text-white uppercase truncate">{item.name}</span>
+      <div className="p-3.5 rounded-xl border-2 border-zinc-950 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[4px_4px_0px_0px_#9333ea] space-y-2 min-w-[210px] pointer-events-none">
+        <div className="flex items-center gap-2 pb-1.5 border-b-2 border-zinc-200 dark:border-zinc-800">
+          <span className="text-xl">{item.icon}</span>
+          <span className="font-black text-sm text-zinc-950 dark:text-white uppercase tracking-tight truncate">
+            {item.name}
+          </span>
         </div>
-        <div className="flex items-center justify-between text-zinc-600 dark:text-zinc-400 pt-0.5">
-          <span className="font-medium">Nominal:</span>
-          <span className="font-black text-zinc-900 dark:text-white">{formatCurrency(item.amount)}</span>
+        <div className="flex items-center justify-between text-xs font-bold text-zinc-700 dark:text-zinc-300">
+          <span>Nominal:</span>
+          <span className="font-black text-sm text-zinc-950 dark:text-white">
+            {formatCurrency(item.amount)}
+          </span>
         </div>
-        <div className="flex items-center justify-between text-zinc-600 dark:text-zinc-400">
-          <span className="font-medium">Proporsi:</span>
+        <div className="flex items-center justify-between text-xs font-bold text-zinc-700 dark:text-zinc-300">
+          <span>Persentase:</span>
           <span
-            className="px-1.5 py-0.5 rounded text-[10px] font-black text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#000]"
+            className="px-2 py-0.5 rounded-md text-xs font-black text-white border-2 border-zinc-950 shadow-[1px_1px_0px_0px_#000]"
             style={{ backgroundColor: item.color }}
           >
             {item.pct}%
@@ -298,9 +302,6 @@ export function ReportsPage() {
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
                   <CardTitle>Proporsi Keuangan</CardTitle>
-                  <span className="text-[10px] font-black tracking-wider px-2 py-0.5 rounded-md border border-zinc-950 dark:border-zinc-700 bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 shadow-[1px_1px_0px_0px_#000]">
-                    円 グラフ
-                  </span>
                 </div>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
                   Distribusi persentase per kategori
@@ -348,15 +349,15 @@ export function ReportsPage() {
             ) : (
               <>
                 {/* Visual Chart with Donut Center Badge */}
-                <div className="relative w-full h-56 my-1 flex items-center justify-center">
+                <div className="relative w-full h-60 my-1 flex items-center justify-center">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={activeCategoryData}
                         cx="50%"
                         cy="50%"
-                        innerRadius={50}
-                        outerRadius={78}
+                        innerRadius={55}
+                        outerRadius={82}
                         paddingAngle={3}
                         dataKey="amount"
                         nameKey="name"
@@ -382,33 +383,38 @@ export function ReportsPage() {
                           )
                         })}
                       </Pie>
-                      <Tooltip content={<MangaPieTooltip />} />
+                      <Tooltip
+                        content={<MangaPieTooltip />}
+                        wrapperStyle={{ zIndex: 100, outline: 'none', pointerEvents: 'none' }}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
 
-                  {/* Center Hole Information Label */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
-                    {activeHovered ? (
-                      <div className="text-center px-1 animate-fade-in">
-                        <span className="text-xl leading-none">{activeHovered.icon}</span>
-                        <p className="text-sm font-black text-zinc-900 dark:text-white leading-tight mt-0.5">
-                          {activeHovered.pct}%
-                        </p>
-                        <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 truncate max-w-[80px]">
-                          {activeHovered.name}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="text-center px-1">
-                        <span className="text-lg leading-none">{pieMode === 'expense' ? '💸' : '💰'}</span>
-                        <p className="text-xs font-black text-zinc-900 dark:text-white leading-tight mt-0.5">
-                          {formatCompact(activeTotal)}
-                        </p>
-                        <span className="text-[9px] font-black tracking-widest text-purple-600 dark:text-purple-400 uppercase">
-                          {pieMode === 'expense' ? 'TOTAL KELUAR' : 'TOTAL MASUK'}
-                        </span>
-                      </div>
-                    )}
+                  {/* Center Hole Information Label with High-Contrast Manga Backing */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+                    <div className="w-[102px] h-[102px] rounded-full bg-white dark:bg-zinc-950 border-2 border-zinc-950 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#9333ea] flex flex-col items-center justify-center p-1.5 text-center">
+                      {activeHovered ? (
+                        <div className="flex flex-col items-center justify-center animate-fade-in">
+                          <span className="text-xl leading-none">{activeHovered.icon}</span>
+                          <span className="text-sm font-black text-purple-600 dark:text-purple-400 leading-none mt-1">
+                            {activeHovered.pct}%
+                          </span>
+                          <span className="text-[11px] font-black text-zinc-950 dark:text-zinc-100 truncate max-w-[84px] mt-0.5">
+                            {activeHovered.name}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center">
+                          <span className="text-lg leading-none">{pieMode === 'expense' ? '💸' : '💰'}</span>
+                          <span className="text-xs font-black text-zinc-950 dark:text-white leading-tight mt-0.5">
+                            {formatCompact(activeTotal)}
+                          </span>
+                          <span className="text-[8px] font-black tracking-wider text-purple-600 dark:text-purple-400 uppercase mt-0.5">
+                            {pieMode === 'expense' ? 'PENGELUARAN' : 'PEMASUKAN'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -440,16 +446,16 @@ export function ReportsPage() {
                                 className="w-3.5 h-3.5 rounded border-2 border-zinc-950 flex-shrink-0 shadow-[1px_1px_0px_0px_#000]"
                                 style={{ backgroundColor: c.color }}
                               />
-                              <span className="font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                              <span className="font-extrabold text-zinc-950 dark:text-zinc-100 truncate">
                                 {c.icon} {c.name}
                               </span>
                             </div>
                             <div className="flex items-center gap-2 flex-shrink-0">
-                              <span className="font-black text-zinc-900 dark:text-zinc-100">
+                              <span className="font-black text-zinc-950 dark:text-zinc-100">
                                 {formatCurrency(c.amount)}
                               </span>
                               <span
-                                className="text-[10px] font-black px-1.5 py-0.5 rounded border border-zinc-950 text-white shadow-[1px_1px_0px_0px_#000]"
+                                className="text-[10px] font-black px-1.5 py-0.5 rounded border-2 border-zinc-950 text-white shadow-[1px_1px_0px_0px_#000]"
                                 style={{ backgroundColor: c.color }}
                               >
                                 {c.pct}%
