@@ -201,6 +201,16 @@ export function ReportsPage() {
     })
   }, [months6, transactions, getMonthSummary])
 
+  // Compact 6-month trend summary stats
+  const trendSummary = useMemo(() => {
+    const totalInc = trendData.reduce((s, d) => s + (d.Pemasukan || 0), 0)
+    const totalExp = trendData.reduce((s, d) => s + (d.Pengeluaran || 0), 0)
+    const avgInc = Math.round(totalInc / (trendData.length || 1))
+    const avgExp = Math.round(totalExp / (trendData.length || 1))
+    const net6 = totalInc - totalExp
+    return { totalInc, totalExp, avgInc, avgExp, net6 }
+  }, [trendData])
+
   // Daily spending this month
   const dailyData = useMemo(() => {
     const dailyMap = {}
@@ -284,60 +294,87 @@ export function ReportsPage() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Bar chart 6 months (2D Manga Aesthetic) */}
-        <Card className="lg:col-span-2 border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea] flex flex-col justify-between">
-          <CardHeader className="pb-2">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+        {/* Bar chart 6 months (2D Manga Aesthetic - Compact) */}
+        <Card className="lg:col-span-2 border-2 border-zinc-950 dark:border-zinc-800 shadow-[4px_4px_0px_0px_#9333ea]">
+          <CardHeader className="p-4 sm:p-5 pb-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <CardTitle>Tren 6 Bulan Terakhir</CardTitle>
               {/* Manga Legend Pills */}
-              <div className="flex items-center gap-2.5 text-xs font-bold self-start sm:self-auto">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border-2 border-zinc-950 dark:border-zinc-700 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 shadow-[1px_1px_0px_0px_#000]">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-emerald-500 border border-zinc-950" />
+              <div className="flex items-center gap-2 text-xs font-bold self-start sm:self-auto">
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md border-2 border-zinc-950 dark:border-zinc-700 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-2 h-2 rounded-xs bg-emerald-500 border border-zinc-950" />
                   <span>Pemasukan</span>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border-2 border-zinc-950 dark:border-zinc-700 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 shadow-[1px_1px_0px_0px_#000]">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-rose-500 border border-zinc-950" />
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md border-2 border-zinc-950 dark:border-zinc-700 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-2 h-2 rounded-xs bg-rose-500 border border-zinc-950" />
                   <span>Pengeluaran</span>
                 </div>
               </div>
             </div>
           </CardHeader>
-          <div className="p-6 pt-2">
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={trendData} barGap={4} barCategoryGap="20%">
-                <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-200 dark:text-zinc-800" vertical={false} />
-                <XAxis
-                  dataKey="name"
-                  tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
-                  axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
-                  tickLine={false}
-                  dy={4}
-                />
-                <YAxis
-                  tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
-                  axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
-                  tickLine={false}
-                  tickFormatter={formatCompact}
-                  dx={-2}
-                />
-                <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 100, outline: 'none' }} />
-                <Bar
-                  dataKey="Pemasukan"
-                  fill="#10b981"
-                  stroke="#09090b"
-                  strokeWidth={2}
-                  radius={[4, 4, 0, 0]}
-                />
-                <Bar
-                  dataKey="Pengeluaran"
-                  fill="#f43f5e"
-                  stroke="#09090b"
-                  strokeWidth={2}
-                  radius={[4, 4, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="p-4 sm:p-5 pt-1 space-y-3">
+            <div className="w-full h-52 sm:h-56">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={trendData}
+                  barGap={3}
+                  barCategoryGap="12%"
+                  margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-200 dark:text-zinc-800" vertical={false} />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
+                    axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
+                    tickLine={false}
+                    dy={4}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fontWeight: 700, fill: '#71717a' }}
+                    axisLine={{ stroke: '#27272a', strokeWidth: 1.5 }}
+                    tickLine={false}
+                    tickFormatter={formatCompact}
+                    dx={-2}
+                  />
+                  <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 100, outline: 'none' }} />
+                  <Bar
+                    dataKey="Pemasukan"
+                    fill="#10b981"
+                    stroke="#09090b"
+                    strokeWidth={2}
+                    radius={[4, 4, 0, 0]}
+                    maxBarSize={26}
+                  />
+                  <Bar
+                    dataKey="Pengeluaran"
+                    fill="#f43f5e"
+                    stroke="#09090b"
+                    strokeWidth={2}
+                    radius={[4, 4, 0, 0]}
+                    maxBarSize={26}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Compact 6-Month Summary Strip */}
+            <div className="grid grid-cols-3 gap-2 pt-2.5 border-t-2 border-zinc-100 dark:border-zinc-800">
+              <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
+                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Rata-rata Masuk</p>
+                <p className="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400 mt-0.5">{formatCurrency(trendSummary.avgInc)}</p>
+              </div>
+              <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
+                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Rata-rata Keluar</p>
+                <p className="text-xs sm:text-sm font-black text-rose-600 dark:text-rose-400 mt-0.5">{formatCurrency(trendSummary.avgExp)}</p>
+              </div>
+              <div className="p-2 rounded-xl border border-zinc-950/40 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 shadow-[1px_1px_0px_0px_#000]">
+                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-tight truncate">Sisa 6 Bulan</p>
+                <p className={`text-xs sm:text-sm font-black mt-0.5 ${trendSummary.net6 >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                  {trendSummary.net6 >= 0 ? '+' : ''}{formatCurrency(trendSummary.net6)}
+                </p>
+              </div>
+            </div>
           </div>
         </Card>
 
